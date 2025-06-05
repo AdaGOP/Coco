@@ -14,19 +14,11 @@
 			remoteGlobalIDString = 5B3D628E2DF16A6900552CCC;
 			remoteInfo = Coco;
 		};
-		5B3D62B02DF16A6A00552CCC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5B3D62872DF16A6900552CCC /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5B3D628E2DF16A6900552CCC;
-			remoteInfo = Coco;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		5B3D628F2DF16A6900552CCC /* Coco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coco.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B3D62A52DF16A6A00552CCC /* CocoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B3D62AF2DF16A6A00552CCC /* CocoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -70,13 +62,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5B3D62AC2DF16A6A00552CCC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -94,7 +79,6 @@
 			children = (
 				5B3D628F2DF16A6900552CCC /* Coco.app */,
 				5B3D62A52DF16A6A00552CCC /* CocoTests.xctest */,
-				5B3D62AF2DF16A6A00552CCC /* CocoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -147,26 +131,6 @@
 			productReference = 5B3D62A52DF16A6A00552CCC /* CocoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		5B3D62AE2DF16A6A00552CCC /* CocoUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5B3D62C02DF16A6A00552CCC /* Build configuration list for PBXNativeTarget "CocoUITests" */;
-			buildPhases = (
-				5B3D62AB2DF16A6A00552CCC /* Sources */,
-				5B3D62AC2DF16A6A00552CCC /* Frameworks */,
-				5B3D62AD2DF16A6A00552CCC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				5B3D62B12DF16A6A00552CCC /* PBXTargetDependency */,
-			);
-			name = CocoUITests;
-			packageProductDependencies = (
-			);
-			productName = CocoUITests;
-			productReference = 5B3D62AF2DF16A6A00552CCC /* CocoUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -181,10 +145,6 @@
 						CreatedOnToolsVersion = 16.0;
 					};
 					5B3D62A42DF16A6A00552CCC = {
-						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 5B3D628E2DF16A6900552CCC;
-					};
-					5B3D62AE2DF16A6A00552CCC = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = 5B3D628E2DF16A6900552CCC;
 					};
@@ -206,7 +166,6 @@
 			targets = (
 				5B3D628E2DF16A6900552CCC /* Coco */,
 				5B3D62A42DF16A6A00552CCC /* CocoTests */,
-				5B3D62AE2DF16A6A00552CCC /* CocoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -220,13 +179,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5B3D62A32DF16A6A00552CCC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5B3D62AD2DF16A6A00552CCC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -250,13 +202,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5B3D62AB2DF16A6A00552CCC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -264,11 +209,6 @@
 			isa = PBXTargetDependency;
 			target = 5B3D628E2DF16A6900552CCC /* Coco */;
 			targetProxy = 5B3D62A62DF16A6A00552CCC /* PBXContainerItemProxy */;
-		};
-		5B3D62B12DF16A6A00552CCC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5B3D628E2DF16A6900552CCC /* Coco */;
-			targetProxy = 5B3D62B02DF16A6A00552CCC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -496,40 +436,6 @@
 			};
 			name = Release;
 		};
-		5B3D62C12DF16A6A00552CCC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4H3L55V83P;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.CocoUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Coco;
-			};
-			name = Debug;
-		};
-		5B3D62C22DF16A6A00552CCC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4H3L55V83P;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.CocoUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Coco;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -556,15 +462,6 @@
 			buildConfigurations = (
 				5B3D62BE2DF16A6A00552CCC /* Debug */,
 				5B3D62BF2DF16A6A00552CCC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		5B3D62C02DF16A6A00552CCC /* Build configuration list for PBXNativeTarget "CocoUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5B3D62C12DF16A6A00552CCC /* Debug */,
-				5B3D62C22DF16A6A00552CCC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
