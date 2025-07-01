@@ -15,21 +15,22 @@ struct NetworkLogger {
         #if DEBUG || STAGING
         print("📡 Network Response:")
         
-        if let urlResponse = response as? HTTPURLResponse {
+        if let urlResponse: HTTPURLResponse = response as? HTTPURLResponse {
             print("🔗 URL: \(urlResponse.url?.absoluteString ?? "")")
             print("📥 Status: \(urlResponse.statusCode)")
             print("📄 Headers: \(urlResponse.allHeaderFields)")
         }
 
-        if let data = data,
-           let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) {
-            print("📦 Body: \(json)")
-        } else if let data = data,
-                  let text = String(data: data, encoding: .utf8) {
-            print("📦 Raw Body: \(text)")
+        if let data: Data = data {
+            if let json: Any = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) {
+                print("📦 Body: \(json)")
+            }
+            else if let text: String = String(data: data, encoding: .utf8) {
+                print("📦 Raw Body: \(text)")
+            }
         }
-
-        if let error = error {
+        
+        if let error: Error = error {
             print("❗️Error: \(error.localizedDescription)")
         }
         print("───────────────────────")
