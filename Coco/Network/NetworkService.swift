@@ -14,12 +14,12 @@ protocol NetworkServiceProtocol: AnyObject {
         method: HTTPMethod,
         parameters: JSONObject,
         headers: [String: String],
-        body: JSONEncodable,
+        body: JSONEncodable?,
         completion: @escaping (Result<T, NetworkServiceError>) -> Void
     ) -> URLSessionDataTask?
 }
 
-final class NetworkService {
+final class NetworkService: NetworkServiceProtocol {
     static let shared: NetworkService = NetworkService()
     
     private init() { }
@@ -30,7 +30,7 @@ final class NetworkService {
         method: HTTPMethod = .get,
         parameters: JSONObject = [:],
         headers: [String: String] = [:],
-        body: JSONEncodable,
+        body: JSONEncodable? = nil,
         completion: @escaping (Result<T, NetworkServiceError>) -> Void
     ) -> URLSessionDataTask? {
         guard let url: URL = URL(string: urlString) else {
@@ -44,10 +44,11 @@ final class NetworkService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if let apiKey: String = Secrets.shared.apiKey {
+            request.setValue(apiKey, forHTTPHeaderField: "apikey")
             request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         }
         
-        if let body: JSONObject = body.toDictionary() {
+        if let body: JSONObject = body?.toDictionary() {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
             } catch {
@@ -86,9 +87,24 @@ final class NetworkService {
             }
 
             do {
-                let rawJson: JSONObject = try JSONSerialization.jsonObject(with: data, options: []) as? JSONObject ?? [:]
-                let parsed: T = try T(json: rawJson)
-                completion(.success(parsed))
+                let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+
+                if let arrayType: any JSONArrayProtocol.Type = T.self as? JSONArrayProtocol.Type,
+                   let jsonArray: [JSONObject] = jsonObject as? [JSONObject] {
+                    if let typedArray: T = try? arrayType.init(jsonArray: jsonArray) as? T {
+                        completion(.success(typedArray))
+                        return
+                    } else {
+                        completion(.failure(.decodingFailed(NSError(domain: "Failed to cast JSONArray", code: -1))))
+                        return
+                    }
+                }
+
+                if let jsonDict: JSONObject = jsonObject as? JSONObject {
+                    let decoded = try T(json: jsonDict)
+                    completion(.success(decoded))
+                    return
+                }
             } catch {
                 assertionFailure("Decoding has Failed with Error: \(error)")
                 completion(.failure(.decodingFailed(error)))
