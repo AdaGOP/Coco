@@ -10,7 +10,7 @@ import Foundation
 protocol ActivityFetcherProtocol: AnyObject {
     func fetchActivity(
         endpoint: ActivityEndpoint,
-        completion: @escaping (Result<UserModelArray, NetworkServiceError>) -> Void
+        completion: @escaping (Result<ActivityModelArray, NetworkServiceError>) -> Void
     )
 }
 
@@ -21,7 +21,7 @@ final class ActivityFetcher: ActivityFetcherProtocol {
     
     func fetchActivity(
         endpoint: ActivityEndpoint,
-        completion: @escaping (Result<UserModelArray, NetworkServiceError>) -> Void
+        completion: @escaping (Result<ActivityModelArray, NetworkServiceError>) -> Void
     ) {
         networkService.request(
             urlString: endpoint.urlString,
@@ -35,4 +35,3 @@ final class ActivityFetcher: ActivityFetcherProtocol {
     
     private let networkService: NetworkServiceProtocol
 }
-

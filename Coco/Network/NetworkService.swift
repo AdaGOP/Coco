@@ -58,6 +58,8 @@ final class NetworkService: NetworkServiceProtocol {
         }
 
         let task: URLSessionDataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            NetworkLogger.logResponse(data: data, response: response, error: error)
+            
             if let error: Error = error {
                 let nsError: NSError = error as NSError
                 if nsError.code == NSURLErrorNotConnectedToInternet {
