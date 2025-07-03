@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+enum ConstraintRelation {
+    case equal
+    case greaterThanOrEqual
+    case lessThanOrEqual
+}
+
 final class ConstraintBuilder {
     private let view: UIView
     private var constraints: [NSLayoutConstraint] = []
@@ -16,31 +22,47 @@ final class ConstraintBuilder {
         self.view = view
         self.view.translatesAutoresizingMaskIntoConstraints = false
     }
-
+    
     @discardableResult
-    func top(equalTo anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) -> Self {
-        constraints.append(view.topAnchor.constraint(equalTo: anchor, constant: constant))
+    func top(
+        to anchor: NSLayoutYAxisAnchor,
+        relation: ConstraintRelation = .equal,
+        constant: CGFloat = 0
+    ) -> Self {
+        applyConstraint(from: view.topAnchor, to: anchor, relation: relation, constant: constant)
         return self
     }
 
     @discardableResult
-    func bottom(equalTo anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) -> Self {
-        constraints.append(view.bottomAnchor.constraint(equalTo: anchor, constant: constant))
+    func bottom(
+        to anchor: NSLayoutYAxisAnchor,
+        relation: ConstraintRelation = .equal,
+        constant: CGFloat = 0
+    ) -> Self {
+        applyConstraint(from: view.bottomAnchor, to: anchor, relation: relation, constant: constant)
         return self
     }
 
     @discardableResult
-    func leading(equalTo anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) -> Self {
-        constraints.append(view.leadingAnchor.constraint(equalTo: anchor, constant: constant))
+    func leading(
+        to anchor: NSLayoutXAxisAnchor,
+        relation: ConstraintRelation = .equal,
+        constant: CGFloat = 0
+    ) -> Self {
+        applyConstraint(from: view.leadingAnchor, to: anchor, relation: relation, constant: constant)
         return self
     }
 
     @discardableResult
-    func trailing(equalTo anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) -> Self {
-        constraints.append(view.trailingAnchor.constraint(equalTo: anchor, constant: constant))
+    func trailing(
+        to anchor: NSLayoutXAxisAnchor,
+        relation: ConstraintRelation = .equal,
+        constant: CGFloat = 0
+    ) -> Self {
+        applyConstraint(from: view.trailingAnchor, to: anchor, relation: relation, constant: constant)
         return self
     }
-
+    
     @discardableResult
     func width(_ constant: CGFloat) -> Self {
         constraints.append(view.widthAnchor.constraint(equalToConstant: constant))
@@ -54,18 +76,48 @@ final class ConstraintBuilder {
     }
 
     @discardableResult
-    func centerX(equalTo anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) -> Self {
-        constraints.append(view.centerXAnchor.constraint(equalTo: anchor, constant: constant))
+    func centerX(
+        to anchor: NSLayoutXAxisAnchor,
+        relation: ConstraintRelation = .equal,
+        constant: CGFloat = 0
+    ) -> Self {
+        applyConstraint(from: view.centerXAnchor, to: anchor, relation: relation, constant: constant)
         return self
     }
 
     @discardableResult
-    func centerY(equalTo anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) -> Self {
-        constraints.append(view.centerYAnchor.constraint(equalTo: anchor, constant: constant))
+    func centerY(
+        to anchor: NSLayoutYAxisAnchor,
+        relation: ConstraintRelation = .equal,
+        constant: CGFloat = 0
+    ) -> Self {
+        applyConstraint(from: view.centerYAnchor, to: anchor, relation: relation, constant: constant)
         return self
     }
 
     func activate() {
         NSLayoutConstraint.activate(constraints)
+    }
+}
+
+private extension ConstraintBuilder {
+    @discardableResult
+    func applyConstraint<Anchor: AnyObject>(
+        from fromAnchor: NSLayoutAnchor<Anchor>,
+        to toAnchor: NSLayoutAnchor<Anchor>,
+        relation: ConstraintRelation,
+        constant: CGFloat
+    ) -> NSLayoutConstraint {
+        let constraint: NSLayoutConstraint
+        switch relation {
+        case .equal:
+            constraint = fromAnchor.constraint(equalTo: toAnchor, constant: constant)
+        case .greaterThanOrEqual:
+            constraint = fromAnchor.constraint(greaterThanOrEqualTo: toAnchor, constant: constant)
+        case .lessThanOrEqual:
+            constraint = fromAnchor.constraint(lessThanOrEqualTo: toAnchor, constant: constant)
+        }
+        constraints.append(constraint)
+        return constraint
     }
 }
