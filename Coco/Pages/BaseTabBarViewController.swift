@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 
 final class BaseTabBarViewController: UITabBarController {
+    weak var baseCoordinator: AppCoordinator?
+    
     var currentActiveNavigationController: UINavigationController? {
         navigationControllers[safe: selectedIndex]
     }

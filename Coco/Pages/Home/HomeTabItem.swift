@@ -14,7 +14,7 @@ struct HomeTabItem: TabItemRepresentable {
 
     func makeRootViewController() -> UIViewController {
         let vc = HomeViewController()
-        vc.view.backgroundColor = .red
+        vc.view.backgroundColor = Token.mainColorPrimary
         vc.title = "Home"
         return vc
     }

@@ -8,7 +8,6 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
     var appCoordinator: AppCoordinator?
 
@@ -23,12 +22,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = window
         
-        guard let currentActiveNavigationController = rootViewController.currentActiveNavigationController else {
+        guard let currentActiveNavigationController: UINavigationController = rootViewController.currentActiveNavigationController else {
             return
         }
         
         appCoordinator = AppCoordinator.shared
         appCoordinator?.setNavigationController(currentActiveNavigationController)
+        
+        rootViewController.baseCoordinator = appCoordinator
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
