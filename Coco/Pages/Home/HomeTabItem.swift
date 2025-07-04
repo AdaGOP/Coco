@@ -13,13 +13,40 @@ struct HomeTabItem: TabItemRepresentable {
     var tabIcon: UIImage? { UIImage(systemName: "bolt") }
 
     func makeRootViewController() -> UIViewController {
-        let vc = HomeViewController()
-        vc.view.backgroundColor = Token.mainColorPrimary
-        vc.title = "Home"
+        let vc = HomeCollectionViewController(viewModel: viewModel)
+        
+        DispatchQueue.main.asyncAfter(
+            deadline: .now() + 5.0,
+            execute: {
+                viewModel.updateActivity(
+                    activity: (
+                        title: "Most Popular",
+                        dataModel: [
+                            .init(
+                                id: "1",
+                                area: "Bunaken, Indonesia",
+                                name: "Venice Grand Canal Cruise",
+                                priceText: "Rp139.000",
+                                imageUrl: URL(string: "https://picsum.photos/327/238")
+                            ),
+                            .init(
+                                id: "2",
+                                area: "Bunaken, Indonesia",
+                                name: "Venice Grand Canal Cruise",
+                                priceText: "Rp139.000",
+                                imageUrl: URL(string: "https://picsum.photos/327/238")
+                            )
+                        ]
+                    )
+                )
+        })
+        
         return vc
     }
     
     func getBaseCoordinator(navigationController: UINavigationController) -> BaseCoordinator {
         HomeCoordinator(navigationController: navigationController)
     }
+    
+    private let viewModel = HomeCollectionViewModel()
 }
