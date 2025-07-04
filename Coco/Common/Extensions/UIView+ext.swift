@@ -19,13 +19,14 @@ extension UIView {
         _ subview: UIView,
         insets: UIEdgeInsets = .zero
     ) {
+        subview.translatesAutoresizingMaskIntoConstraints = false
         addSubview(subview)
 
         subview.layout {
-            $0.top(equalTo: topAnchor, constant: insets.top)
-              .leading(equalTo: leadingAnchor, constant: insets.left)
-              .trailing(equalTo: trailingAnchor, constant: -insets.right)
-              .bottom(equalTo: bottomAnchor, constant: -insets.bottom)
+            $0.top(to: topAnchor, relation: .equal, constant: insets.top)
+              .leading(to: leadingAnchor, relation: .equal, constant: insets.left)
+              .trailing(to: trailingAnchor, relation: .equal, constant: -insets.right)
+              .bottom(to: bottomAnchor, relation: .equal, constant: -insets.bottom)
         }
     }
 }
