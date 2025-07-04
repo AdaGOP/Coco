@@ -29,4 +29,10 @@ extension UIView {
               .bottom(to: bottomAnchor, relation: .equal, constant: -insets.bottom)
         }
     }
+    
+    func addSubviews(_ views: [UIView]) {
+        views.forEach {
+            addSubview($0)
+        }
+    }
 }

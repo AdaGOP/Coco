@@ -9,19 +9,19 @@ import Foundation
 import UIKit
 
 enum Token {
-    @ColorElement(light: UIColor.from("#85CC16"), dark: UIColor.from("#85CC16"))
+    @ColorElement(light: UIColor.from("#1AB2E5"), dark: UIColor.from("#1AB2E5"))
     static var mainColorPrimary: UIColor
     
     @ColorElement(light: UIColor.from("#F6F8FE"), dark: UIColor.from("#F6F8FE"))
     static var mainColorSecondary: UIColor
     
-    @ColorElement(light: UIColor.from("#4038FF"), dark: UIColor.from("#4038FF"))
-    static var mainColorDarkBlue: UIColor
+    @ColorElement(light: UIColor.from("#2F3C33"), dark: UIColor.from("#2F3C33"))
+    static var mainColorDarkGray: UIColor
     
-    @ColorElement(light: UIColor.from("#183D1E"), dark: UIColor.from("#183D1E"))
-    static var mainColorThird: UIColor
+    @ColorElement(light: UIColor.from("#B9EC63"), dark: UIColor.from("#B9EC63"))
+    static var mainColorLemon: UIColor
     
-    @ColorElement(light: UIColor.from("#183D1E"), dark: UIColor.from("#183D1E"))
+    @ColorElement(light: UIColor.from("#F6F5F6"), dark: UIColor.from("#F6F5F6"))
     static var mainColorForth: UIColor
     
     @ColorElement(light: UIColor.from("#00C566"), dark: UIColor.from("#00C566"))
@@ -39,10 +39,13 @@ enum Token {
     @ColorElement(light: UIColor.from("#E3E7EC"), dark: UIColor.from("#E3E7EC"))
     static var additionalColorsLine: UIColor
     
-    @ColorElement(light: UIColor.from("#4A4A65"), dark: UIColor.from("#4A4A65"))
+    @ColorElement(light: UIColor.from("#282837"), dark: UIColor.from("#282837"))
     static var additionalColorsLineDark: UIColor
     
-    @ColorElement(light: UIColor.from("#FDFDFD"), dark: UIColor.from("#FDFDFD"))
+    @ColorElement(light: UIColor.from("#111111"), dark: UIColor.from("#111111"))
+    static var additionalColorsBlack: UIColor
+    
+    @ColorElement(light: UIColor.from("#E3E9ED"), dark: UIColor.from("#E3E9ED"))
     static var grayscale10: UIColor
     
     @ColorElement(light: UIColor.from("#ECF1F6"), dark: UIColor.from("#ECF1F6"))

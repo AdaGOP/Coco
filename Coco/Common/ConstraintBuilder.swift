@@ -74,6 +74,13 @@ final class ConstraintBuilder {
         constraints.append(view.heightAnchor.constraint(equalToConstant: constant))
         return self
     }
+    
+    @discardableResult
+    func size(_ constant: CGFloat) -> Self {
+        constraints.append(view.heightAnchor.constraint(equalToConstant: constant))
+        constraints.append(view.widthAnchor.constraint(equalToConstant: constant))
+        return self
+    }
 
     @discardableResult
     func centerX(
