@@ -31,6 +31,7 @@ final class HomeReusableHeader: UICollectionReusableView {
 
 private extension HomeReusableHeader {
     func setupView() {
-        addSubviewAndLayout(titleLabel)
+        addSubviewAndLayout(titleLabel, insets: .init(top: 0, left: 0, bottom: 16.0,
+                                                      right: 0))
     }
 }
