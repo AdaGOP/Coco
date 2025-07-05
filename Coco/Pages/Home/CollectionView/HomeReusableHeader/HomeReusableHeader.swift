@@ -23,7 +23,7 @@ final class HomeReusableHeader: UICollectionReusableView {
     }
     
     private lazy var titleLabel: UILabel = UILabel(
-        font: .jakartaSans(forTextStyle: .callout),
+        font: .jakartaSans(forTextStyle: .title3, weight: .semibold),
         textColor: Token.additionalColorsBlack,
         numberOfLines: 2
     )

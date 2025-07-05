@@ -26,7 +26,7 @@ final class HomeActivityCell: UICollectionViewCell {
         let attributedString = NSMutableAttributedString(
             string: dataModel.priceText,
             attributes: [
-                .font : UIFont.jakartaSans(forTextStyle: .body, weight: .medium),
+                .font : UIFont.jakartaSans(forTextStyle: .body, weight: .bold),
                 .foregroundColor : Token.additionalColorsBlack
             ]
         )
@@ -35,7 +35,7 @@ final class HomeActivityCell: UICollectionViewCell {
             NSAttributedString(
                 string: "/Person",
                 attributes: [
-                    .font : UIFont.jakartaSans(forTextStyle: .body, weight: .medium),
+                    .font : UIFont.jakartaSans(forTextStyle: .callout, weight: .medium),
                     .foregroundColor : Token.additionalColorsBlack
                 ]
             )
@@ -47,17 +47,17 @@ final class HomeActivityCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = createImageView()
     private lazy var areaView: UIView = createAreaView()
     private lazy var areaLabel: UILabel = UILabel(
-        font: .jakartaSans(forTextStyle: .body),
+        font: .jakartaSans(forTextStyle: .callout, weight: .medium),
         textColor: Token.additionalColorsBlack,
         numberOfLines: 2
     )
     private lazy var nameLabel: UILabel = UILabel(
-        font: .jakartaSans(forTextStyle: .title1),
+        font: .jakartaSans(forTextStyle: .title3, weight: .bold),
         textColor: Token.additionalColorsBlack,
         numberOfLines: 2
     )
     private lazy var priceLabel: UILabel = UILabel(
-        font: .jakartaSans(forTextStyle: .body),
+        font: .jakartaSans(forTextStyle: .body, weight: .bold),
         textColor: Token.additionalColorsBlack,
         numberOfLines: 2
     )
@@ -65,30 +65,19 @@ final class HomeActivityCell: UICollectionViewCell {
 
 private extension HomeActivityCell {
     func setupView() {
-        contentView.addSubviews([
-            imageView,
-            areaView,
-            priceLabel,
-        ])
+        let stackView: UIStackView = UIStackView(
+            arrangedSubviews: [
+                imageView,
+                areaView,
+                nameLabel,
+                priceLabel,
+            ]
+        )
+        stackView.spacing = 4.0
+        stackView.axis = .vertical
+        stackView.alignment = .leading
         
-        imageView.layout {
-            $0.top(to: contentView.topAnchor)
-                .leading(to: contentView.leadingAnchor)
-                .trailing(to: contentView.trailingAnchor)
-        }
-        
-        areaView.layout {
-            $0.top(to: imageView.bottomAnchor, constant: 4.0)
-                .leading(to: contentView.leadingAnchor)
-                .trailing(to: contentView.trailingAnchor)
-        }
-        
-        priceLabel.layout {
-            $0.top(to: areaView.bottomAnchor, constant: 4.0)
-                .leading(to: contentView.leadingAnchor)
-                .trailing(to: contentView.trailingAnchor)
-                .bottom(to: contentView.bottomAnchor)
-        }
+        contentView.addSubviewAndLayout(stackView)
     }
     
     func createImageView() -> UIImageView {
