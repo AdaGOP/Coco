@@ -12,7 +12,7 @@ extension UIImageView {
     func loadImage(from url: URL?, cacheKey: String? = nil) {
         guard let url: URL else { return }
         
-        let key = cacheKey ?? url.absoluteString
+        let key: String = cacheKey ?? url.absoluteString
         
         if let cachedImage: UIImage = ImageCacheManager.shared.image(forKey: key) {
             DispatchQueue.main.async {
