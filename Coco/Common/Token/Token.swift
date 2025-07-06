@@ -45,6 +45,12 @@ enum Token {
     @ColorElement(light: UIColor.from("#111111"), dark: UIColor.from("#111111"))
     static var additionalColorsBlack: UIColor
     
+    @ColorElement(light: UIColor.from("#936DFF"), dark: UIColor.from("#936DFF"))
+    static var additionalColorsPurple: UIColor
+    
+    @ColorElement(light: UIColor.from("#FF784B"), dark: UIColor.from("#FF784B"))
+    static var additionalColorsOrange: UIColor
+    
     @ColorElement(light: UIColor.from("#E3E9ED"), dark: UIColor.from("#E3E9ED"))
     static var grayscale10: UIColor
     

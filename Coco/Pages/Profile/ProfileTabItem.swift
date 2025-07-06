@@ -10,7 +10,7 @@ import UIKit
 
 struct ProfileTabItem: TabItemRepresentable {
     var tabTitle: String { "Profile" }
-    var tabIcon: UIImage? { UIImage(systemName: "gearshape") }
+    var tabIcon: UIImage? { CocoIcon.icTabIconProfile.image }
 
     func makeRootViewController() -> UIViewController {
         let vc = ProfileViewController()

@@ -58,7 +58,7 @@ private extension BaseTabBarViewController {
         
         viewControllers = navigationControllers
         
-        tabBar.tintColor = .systemBlue
+        tabBar.tintColor = Token.mainColorPrimary
         tabBar.backgroundColor = .white
     }
     

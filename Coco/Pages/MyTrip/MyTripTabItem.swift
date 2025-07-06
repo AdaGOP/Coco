@@ -10,7 +10,7 @@ import UIKit
 
 struct MyTripTabItem: TabItemRepresentable {
     var tabTitle: String { "MyTrip" }
-    var tabIcon: UIImage? { UIImage(systemName: "person") }
+    var tabIcon: UIImage? { CocoIcon.icTabIconTrip.image }
 
     func makeRootViewController() -> UIViewController {
         let vc = MyTripViewController()

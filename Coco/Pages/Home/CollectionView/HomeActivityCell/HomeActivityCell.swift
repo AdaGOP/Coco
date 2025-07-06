@@ -44,6 +44,11 @@ final class HomeActivityCell: UICollectionViewCell {
         priceLabel.attributedText = attributedString
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
+    
     private lazy var imageView: UIImageView = createImageView()
     private lazy var areaView: UIView = createAreaView()
     private lazy var areaLabel: UILabel = UILabel(
@@ -75,7 +80,8 @@ private extension HomeActivityCell {
         )
         stackView.spacing = 4.0
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = .fill
+        stackView.distribution = .fill
         
         contentView.addSubviewAndLayout(stackView)
     }
@@ -108,11 +114,6 @@ private extension HomeActivityCell {
                 .top(to: contentView.topAnchor)
                 .bottom(to: contentView.bottomAnchor)
         }
-        
-        imageView.addConstraints([
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
-            
-        ])
         
         areaLabel.layout {
             $0.leading(to: imageView.trailingAnchor, constant: 4.0)

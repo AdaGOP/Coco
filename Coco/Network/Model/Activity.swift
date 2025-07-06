@@ -13,10 +13,9 @@ struct Activity: JSONDecodable {
     let description: String
     let destinationid: Int
     let durationMinutes: Int
-    let hostid: Int
     let id: Int
     let pricing: Double
-    let thumbnailurl: String
+    let thumbnailurl: String?
     let title: String
 
     private enum CodingKeys: String, CodingKey {
@@ -25,7 +24,6 @@ struct Activity: JSONDecodable {
         case description
         case destinationid = "destination_id"
         case durationMinutes = "duration_minutes"
-        case hostid = "host_id"
         case id, pricing
         case thumbnailurl = "thumbnail_url"
         case title

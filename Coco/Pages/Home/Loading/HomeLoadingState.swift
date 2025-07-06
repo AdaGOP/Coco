@@ -9,5 +9,11 @@ import Foundation
 import SwiftUI
 
 final class HomeLoadingState: ObservableObject {
-    @Published var percentage: CGFloat = 0
+    // for view usage only
+    @Published var _percentage: CGFloat = 0
+        
+    var percentage: CGFloat {
+        get { _percentage }
+        set { _percentage = min(max(newValue, 0), 100) }
+    }
 }

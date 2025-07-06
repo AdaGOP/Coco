@@ -64,7 +64,18 @@ extension HomeCollectionViewController: HomeCollectionViewModelAction {
 }
 
 extension HomeCollectionViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item: AnyHashable = dataSource?.itemIdentifier(for: indexPath) else {
+             return
+        }
+        
+        switch item {
+        case let item as HomeActivityCellDataModel:
+            viewModel.onActivityDidTap(item)
+        default:
+            break
+        }
+    }
 }
 
 private extension HomeCollectionViewController {

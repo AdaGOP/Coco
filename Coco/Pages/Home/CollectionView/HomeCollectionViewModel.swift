@@ -9,6 +9,7 @@ import Foundation
 
 final class HomeCollectionViewModel {
     weak var actionDelegate: HomeCollectionViewModelAction?
+    weak var delegate: HomeCollectionViewModelDelegate?
     
     func updateActivity(activity: HomeActivityCellSectionDataModel) {
         activityData = activity
@@ -22,6 +23,11 @@ extension HomeCollectionViewModel: HomeCollectionViewModelProtocol {
     func onViewDidLoad() {
         // Only Called Once
         actionDelegate?.configureDataSource()
+        reloadCollection()
+    }
+    
+    func onActivityDidTap(_ dataModel: HomeActivityCellDataModel) {
+        delegate?.notifyCollectionViewActivityDidTap(dataModel)
     }
 }
 
