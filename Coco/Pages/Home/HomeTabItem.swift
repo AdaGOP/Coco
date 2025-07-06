@@ -11,16 +11,13 @@ import UIKit
 
 struct HomeTabItem: TabItemRepresentable {
     var tabTitle: String { "Home" }
-    var tabIcon: UIImage? { UIImage(systemName: "bolt") }
+    var tabIcon: UIImage? { CocoIcon.icTabIconHome.image }
 
     func makeRootViewController() -> UIViewController {
-        let vc = UIHostingController(rootView: HomeLoadingView(state: vm))
+        let viewModel: HomeViewModel = HomeViewModel()
+        let viewController: HomeViewController = HomeViewController(viewModel: viewModel)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-            vm.percentage = 0.4
-        })
-        
-        return vc
+        return viewController
     }
     
     func getBaseCoordinator(navigationController: UINavigationController) -> BaseCoordinator {

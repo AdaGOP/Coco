@@ -22,7 +22,7 @@ struct HomeLoadingView: View {
                     )
                 )
             
-            CocoLoadingBar(percentage: state.percentage)
+            CocoLoadingBar(percentage: state._percentage)
         }
         .padding(16.0)
     }

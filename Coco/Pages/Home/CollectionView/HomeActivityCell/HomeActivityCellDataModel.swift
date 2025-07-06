@@ -14,6 +14,22 @@ struct HomeActivityCellDataModel: Hashable {
     let name: String
     let priceText: String
     let imageUrl: URL?
+    
+    init(id: String, area: String, name: String, priceText: String, imageUrl: URL?) {
+        self.id = id
+        self.area = area
+        self.name = name
+        self.priceText = priceText
+        self.imageUrl = imageUrl
+    }
+    
+    init(activity: Activity) {
+        self.id = "\(activity.id)"
+        self.area = activity.title
+        self.name = activity.title
+        self.priceText = "\(activity.pricing)"
+        self.imageUrl = URL(string: "https://picsum.photos/200/300") // TODO
+    }
 }
 
 typealias HomeActivityCellSectionDataModel = (title: String?, dataModel: [HomeActivityCellDataModel])
