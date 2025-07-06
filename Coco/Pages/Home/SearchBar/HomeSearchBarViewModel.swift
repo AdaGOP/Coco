@@ -8,7 +8,13 @@
 import Foundation
 import SwiftUI
 
+protocol HomeSearchBarViewModelDelegate: AnyObject {
+    func notifyHomeSearchBarDidTap(isTypeAble: Bool)
+}
+
 final class HomeSearchBarViewModel: ObservableObject {
+    weak var delegate: HomeSearchBarViewModelDelegate?
+    
     @Published var currentTypedText: String = ""
     
     let trailingIcon: ImageHandler?
@@ -22,6 +28,6 @@ final class HomeSearchBarViewModel: ObservableObject {
     
     func onTextFieldFocusDidChange(to newFocus: Bool) {
         guard newFocus else { return }
-        
+        delegate?.notifyHomeSearchBarDidTap(isTypeAble: isTypeAble)
     }
 }

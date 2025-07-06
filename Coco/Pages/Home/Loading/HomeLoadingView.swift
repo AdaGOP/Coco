@@ -23,28 +23,6 @@ struct HomeLoadingView: View {
                 )
             
             CocoLoadingBar(percentage: state.percentage)
-            
-            CocoInputTextField(
-                leadingIcon: CocoIcon.icSearchLoop.image,
-                currentTypedText: $currentTypedText,
-                trailingIcon: (CocoIcon.icFIlterIcon.image, {
-                    
-                }),
-                placeholder: "Search..."
-            ) { focusChanged in
-                
-            }
-            
-            CocoInputTextField(
-                leadingIcon: CocoIcon.icSearchLoop.image,
-                currentTypedText: $currentTypedText,
-                placeholder: "Search...",
-                shouldInterceptFocus: true
-            ) { focusChanged in
-                
-            }
-            
-            Spacer()
         }
         .padding(16.0)
     }

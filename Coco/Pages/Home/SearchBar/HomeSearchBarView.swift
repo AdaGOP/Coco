@@ -15,11 +15,9 @@ struct HomeSearchBarView: View {
         CocoInputTextField(
             leadingIcon: CocoIcon.icSearchLoop.image,
             currentTypedText: $viewModel.currentTypedText,
-            trailingIcon: (CocoIcon.icFIlterIcon.image, {
-                
-            }),
+            trailingIcon: viewModel.trailingIcon,
             placeholder: "Search...",
-            shouldInterceptFocus: viewModel.isTypeAble,
+            shouldInterceptFocus: !viewModel.isTypeAble,
             onFocusedAction: viewModel.onTextFieldFocusDidChange(to:)
         )
     }
