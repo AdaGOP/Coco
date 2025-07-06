@@ -11,6 +11,8 @@ import SwiftUI
 struct ImageSliderView: View {
     let images: [String]
     @State private var currentIndex: Int = 0
+    
+    @Namespace private var dotAnimation
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -42,6 +44,7 @@ struct ImageSliderView: View {
                                 : UIColor.from("#EAEAEA").toColor()
                         )
                         .frame(width: currentIndex == index ? 24.0 : 8.0, height: 8)
+                        .animation(.easeInOut(duration: 0.3), value: currentIndex)
                         .contentShape(Rectangle())
                         .onTapGesture {
                             withAnimation {
