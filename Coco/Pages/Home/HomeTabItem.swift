@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import UIKit
 
 struct HomeTabItem: TabItemRepresentable {
@@ -13,32 +14,10 @@ struct HomeTabItem: TabItemRepresentable {
     var tabIcon: UIImage? { UIImage(systemName: "bolt") }
 
     func makeRootViewController() -> UIViewController {
-        let vc = HomeCollectionViewController(viewModel: viewModel)
+        let vc = UIHostingController(rootView: HomeLoadingView(state: vm))
         
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + 5.0,
-            execute: {
-                viewModel.updateActivity(
-                    activity: (
-                        title: "Most Popular",
-                        dataModel: [
-                            .init(
-                                id: "1",
-                                area: "Bunaken, Indonesia",
-                                name: "Venice Grand Canal Cruise",
-                                priceText: "Rp139.000",
-                                imageUrl: URL(string: "https://picsum.photos/327/238")
-                            ),
-                            .init(
-                                id: "2",
-                                area: "Bunaken, Indonesia",
-                                name: "Venice Grand Canal Cruise",
-                                priceText: "Rp139.000",
-                                imageUrl: URL(string: "https://picsum.photos/327/238")
-                            )
-                        ]
-                    )
-                )
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+            vm.percentage = 0.4
         })
         
         return vc
@@ -49,4 +28,6 @@ struct HomeTabItem: TabItemRepresentable {
     }
     
     private let viewModel = HomeCollectionViewModel()
+    
+    private let vm = HomeLoadingState()
 }

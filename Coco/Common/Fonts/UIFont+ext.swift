@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import UIKit
 
 extension UIFont {
@@ -41,5 +42,9 @@ extension UIFont {
         }
 
         return UIFontMetrics(forTextStyle: style).scaledFont(for: customFont)
+    }
+    
+    func toFont() -> Font {
+        Font(self)
     }
 }
