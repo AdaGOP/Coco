@@ -56,4 +56,11 @@ extension HomeViewController: HomeViewModelAction {
             self.thisView.toggleLoadingView(isShown: false)
         })
     }
+    
+    func activityDidSelect() {
+        guard let navigationController else { return }
+        let coordinator: HomeCoordinator = HomeCoordinator(navigationController: navigationController)
+        coordinator.parentCoordinator = AppCoordinator.shared
+        coordinator.start()
+    }
 }
