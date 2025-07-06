@@ -92,8 +92,7 @@ private extension HomeActivityCell {
     }
     
     func createAreaView() -> UIView {
-        let imageView: UIImageView = UIImageView(image: UIImage(named: "activityAreaIcon"))
-        // TODO: Add Image
+        let imageView: UIImageView = UIImageView(image: CocoIcon.icActivityAreaIcon.image)
         imageView.contentMode = .scaleAspectFit
         imageView.layout {
             $0.size(20)
@@ -109,6 +108,11 @@ private extension HomeActivityCell {
                 .top(to: contentView.topAnchor)
                 .bottom(to: contentView.bottomAnchor)
         }
+        
+        imageView.addConstraints([
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+            
+        ])
         
         areaLabel.layout {
             $0.leading(to: imageView.trailingAnchor, constant: 4.0)

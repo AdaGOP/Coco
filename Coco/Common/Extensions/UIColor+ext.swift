@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 extension UIColor {
     static func from(_ hex: String) -> UIColor {
@@ -47,5 +48,9 @@ extension UIColor {
         }
 
         return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+    }
+    
+    func toColor() -> Color {
+        Color(self)
     }
 }
