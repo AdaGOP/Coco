@@ -36,16 +36,16 @@ extension ActivityDetailViewController: ActivityDetailViewModelAction {
     func configureView(data: ActivityDetailDataModel) {
         thisView.configureView(data)
         
-        let sliderVCs: ImageSliderHostingController = ImageSliderHostingController(
-            images: [
-                "https://picsum.photos/id/237/600/341",
-                "https://picsum.photos/id/238/600/341",
-                "https://picsum.photos/id/239/600/341"
-            ]
-        )
-        addChild(sliderVCs)
-        thisView.addImageSliderView(with: sliderVCs.view)
-        sliderVCs.didMove(toParent: self)
+        if data.imageUrlsString.isEmpty {
+            thisView.toggleImageSliderView(isShown: false)
+        }
+        else {
+            thisView.toggleImageSliderView(isShown: true)
+            let sliderVCs: ImageSliderHostingController = ImageSliderHostingController(images: data.imageUrlsString)
+            addChild(sliderVCs)
+            thisView.addImageSliderView(with: sliderVCs.view)
+            sliderVCs.didMove(toParent: self)
+        }
     }
     
     func updatePackageData(data: [ActivityDetailDataModel.Package]) {

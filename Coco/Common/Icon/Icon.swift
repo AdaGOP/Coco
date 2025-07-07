@@ -18,6 +18,11 @@ final class Icon {
         return image
     }
     
+    func getImageWithTintColor(_ color: UIColor) -> UIImage {
+        let imageTemplate: UIImage = image.withRenderingMode(.alwaysOriginal)
+        return imageTemplate.withTintColor(color)
+    }
+    
     init(iconName: String) {
         self.iconName = iconName
     }

@@ -13,11 +13,11 @@ struct ActivityDetailDataModel {
     let imageUrlsString: [String]
     
     let detailInfomation: ActivitySectionLayout<String>
-    let providerDetail: ActivitySectionLayout<String>
+    let providerDetail: ActivitySectionLayout<ProviderDetail>
     let tripFacilities: ActivitySectionLayout<[String]>
     let tnc: ActivitySectionLayout<[String]>
     
-    let availablePackages: [Package]
+    let availablePackages: ActivitySectionLayout<[Package]>
     
     struct ProviderDetail {
         let name: String

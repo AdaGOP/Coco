@@ -37,16 +37,14 @@ final class ActivityDetailView: UIView {
         )
         
         // Trip Provider
-        let sectionLabel: UILabel = UILabel(
-            font: .jakartaSans(forTextStyle: .title3, weight: .regular),
-            textColor: Token.grayscale70,
-            numberOfLines: 0
-        )
-        sectionLabel.text = data.detailInfomation.content
         contentStackView.addArrangedSubview(
             createSectionView(
                 title: data.providerDetail.title,
-                view: UIView()
+                view: createProviderDetail(
+                    imageUrl: data.providerDetail.content.imageUrlString,
+                    name: data.providerDetail.content.name,
+                    description: data.providerDetail.content.description
+                )
             )
         )
         
@@ -65,11 +63,22 @@ final class ActivityDetailView: UIView {
                 view: createBenefitListView(titles: data.tnc.content)
             )
         )
+        
+        contentStackView.addArrangedSubview(packageSection)
+        data.availablePackages.content.forEach { data in
+            packageContainer.addArrangedSubview(createPackageView(data: data))
+        }
+        
+        packageLabel.text = data.availablePackages.title
     }
     
     func addImageSliderView(with view: UIView) {
         imageSliderView.subviews.forEach { $0.removeFromSuperview() }
         imageSliderView.addSubviewAndLayout(view)
+    }
+    
+    func toggleImageSliderView(isShown: Bool) {
+        imageSliderView.isHidden = !isShown
     }
     
     func updatePackageData(_ data: [ActivityDetailDataModel.Package]) {
@@ -79,7 +88,7 @@ final class ActivityDetailView: UIView {
     private lazy var imageSliderView: UIView = UIView()
     private lazy var titleView: UIView = createTitleView()
     private lazy var titleLabel: UILabel = UILabel(
-        font: .jakartaSans(forTextStyle: .title1, weight: .bold),
+        font: .jakartaSans(forTextStyle: .title2, weight: .bold),
         textColor: Token.additionalColorsBlack,
         numberOfLines: 2
     )
@@ -90,6 +99,15 @@ final class ActivityDetailView: UIView {
         numberOfLines: 2
     )
     
+    private lazy var packageSection: UIView = createPackageSection()
+    private lazy var packageLabel: UILabel = UILabel(
+        font: .jakartaSans(forTextStyle: .subheadline, weight: .bold),
+        textColor: Token.additionalColorsBlack,
+        numberOfLines: 2
+    )
+    private lazy var packageButton = createPackageTextButton()
+    
+    private lazy var packageContainer: UIStackView = createStackView(spacing: 18.0)
     private lazy var contentStackView: UIStackView = createStackView(spacing: 29.0)
     private lazy var headerStackView: UIStackView = createStackView(spacing: 0)
 }
@@ -134,6 +152,8 @@ extension ActivityDetailView {
         contentStackView.backgroundColor = Token.additionalColorsWhite
         
         scrollView.backgroundColor = UIColor.from("#F5F5F5")
+        
+        imageSliderView.isHidden = true
     }
 }
 
@@ -177,6 +197,39 @@ private extension ActivityDetailView {
         }
         
         return contentView
+    }
+    
+    func createIconTextView(image: UIImage, text: String) -> UIView {
+        let imageView: UIImageView = UIImageView(image: image)
+        imageView.layout {
+            $0.size(20.0)
+        }
+        
+        let label: UILabel = UILabel(
+            font: .jakartaSans(forTextStyle: .footnote, weight: .medium),
+            textColor: Token.grayscale90,
+            numberOfLines: 2
+        )
+        label.text = text
+        
+        let containerView: UIView = UIView()
+        containerView.addSubviews([
+            imageView,
+            label
+        ])
+        
+        imageView.layout {
+            $0.leading(to: containerView.leadingAnchor)
+                .centerY(to: containerView.centerYAnchor)
+        }
+        
+        label.layout {
+            $0.leading(to: imageView.trailingAnchor, constant: 4.0)
+                .trailing(to: containerView.trailingAnchor)
+                .centerY(to: containerView.centerYAnchor)
+        }
+        
+        return containerView
     }
     
     func createTitleView() -> UIView {
@@ -243,7 +296,7 @@ private extension ActivityDetailView {
             $0.size(24.0)
         }
         let benefitLabel: UILabel = UILabel(
-            font: .jakartaSans(forTextStyle: .callout, weight: .regular),
+            font: .jakartaSans(forTextStyle: .footnote, weight: .regular),
             textColor: Token.additionalColorsBlack,
             numberOfLines: 0
         )
@@ -278,5 +331,179 @@ private extension ActivityDetailView {
         }
         
         return stackView
+    }
+    
+    func createProviderDetail(imageUrl: String, name: String, description: String) -> UIView {
+        let contentView: UIView = UIView()
+        let imageView: UIImageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layout {
+            $0.size(92.0)
+        }
+        imageView.layer.cornerRadius = 14.0
+        imageView.loadImage(from: URL(string: imageUrl))
+        imageView.clipsToBounds = true
+        
+        let nameLabel: UILabel = UILabel(
+            font: .jakartaSans(forTextStyle: .subheadline, weight: .bold),
+            textColor: Token.additionalColorsBlack,
+            numberOfLines: 2
+        )
+        nameLabel.text = name
+        
+        let descriptionLabel: UILabel = UILabel(
+            font: .jakartaSans(forTextStyle: .footnote, weight: .medium),
+            textColor: Token.grayscale90,
+            numberOfLines: 0
+        )
+        descriptionLabel.text = description
+        
+        contentView.addSubviews([
+            imageView,
+            nameLabel,
+            descriptionLabel,
+        ])
+        
+        imageView.layout {
+            $0.leading(to: contentView.leadingAnchor)
+                .top(to: contentView.topAnchor)
+                .bottom(to: contentView.bottomAnchor, relation: .lessThanOrEqual)
+        }
+        
+        nameLabel.layout {
+            $0.leading(to: imageView.trailingAnchor, constant: 10.0)
+                .top(to: contentView.topAnchor)
+                .trailing(to: contentView.trailingAnchor)
+        }
+        
+        descriptionLabel.layout {
+            $0.leading(to: nameLabel.leadingAnchor)
+                .top(to: nameLabel.bottomAnchor, constant: 8.0)
+                .trailing(to: contentView.trailingAnchor)
+                .bottom(to: contentView.bottomAnchor, relation: .lessThanOrEqual)
+        }
+        
+        return contentView
+    }
+    
+    func createPackageView(data: ActivityDetailDataModel.Package) -> UIView {
+        let containerStackView: UIStackView = createStackView(spacing: 12.0, axis: .horizontal)
+        let contentStackView: UIStackView = createStackView(spacing: 10.0)
+        
+        let headerStackView: UIStackView = createStackView(spacing: 12.0)
+        headerStackView.alignment = .leading
+        
+        let footerStackView: UIStackView = createStackView(spacing: 12.0)
+        
+        let imageView: UIImageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layout {
+            $0.size(92.0)
+        }
+        imageView.layer.cornerRadius = 14.0
+        imageView.loadImage(from: URL(string: data.imageUrlString))
+        imageView.clipsToBounds = true
+        
+        let nameLabel: UILabel = UILabel(
+            font: .jakartaSans(forTextStyle: .subheadline, weight: .bold),
+            textColor: Token.additionalColorsBlack,
+            numberOfLines: 2
+        )
+        nameLabel.text = data.name
+        
+        let ratingAreaStackView: UIStackView = createStackView(spacing: 4.0, axis: .horizontal)
+        ratingAreaStackView.alignment = .leading
+        
+        ratingAreaStackView.addArrangedSubview(
+            createIconTextView(
+                image: CocoIcon.icActivityAreaIcon.getImageWithTintColor(Token.grayscale70),
+                text: data.location
+            )
+        )
+        
+        ratingAreaStackView.addArrangedSubview(
+            createIconTextView(
+                image: CocoIcon.icStarRating.image,
+                text: data.rating
+            )
+        )
+        
+        let priceLabel: UILabel = UILabel(
+            font: .jakartaSans(forTextStyle: .subheadline, weight: .bold),
+            textColor: Token.additionalColorsBlack,
+            numberOfLines: 2
+        )
+        priceLabel.text = data.price
+        
+        containerStackView.addArrangedSubview(imageView)
+        containerStackView.addArrangedSubview(contentStackView)
+        
+        contentStackView.addArrangedSubview(headerStackView)
+        contentStackView.addArrangedSubview(footerStackView)
+        
+        headerStackView.addArrangedSubview(nameLabel)
+        headerStackView.addArrangedSubview(ratingAreaStackView)
+        
+        footerStackView.addArrangedSubview(priceLabel)
+        
+        containerStackView.isLayoutMarginsRelativeArrangement = true
+        containerStackView.layoutMargins = .init(edges: 12.0)
+        containerStackView.layer.cornerRadius = 16.0
+        containerStackView.backgroundColor = Token.mainColorForth
+        
+        return containerStackView
+    }
+    
+    func createPackageSection() -> UIView {
+        let containerView: UIView = UIView()
+        containerView.addSubviews([
+            packageLabel,
+            packageButton
+        ])
+        
+        packageLabel.setContentHuggingPriority(.defaultLow - 1, for: .horizontal)
+        
+        packageLabel.layout {
+            $0.leading(to: containerView.leadingAnchor)
+                .centerY(to: containerView.centerYAnchor)
+        }
+        
+        packageButton.layout {
+            $0.leading(to: packageLabel.trailingAnchor, constant: 4.0)
+                .trailing(to: containerView.trailingAnchor)
+                .centerY(to: containerView.centerYAnchor)
+        }
+        
+        let contentView: UIView = UIView()
+        contentView.addSubviews([
+            containerView,
+            packageContainer
+        ])
+        
+        containerView.layout {
+            $0.top(to: contentView.topAnchor)
+                .leading(to: contentView.leadingAnchor)
+                .trailing(to: contentView.trailingAnchor)
+        }
+        
+        packageContainer.layout {
+            $0.top(to: containerView.bottomAnchor, constant: 16.0)
+                .bottom(to: contentView.bottomAnchor)
+                .leading(to: contentView.leadingAnchor)
+                .trailing(to: contentView.trailingAnchor)
+        }
+        
+        return contentView
+    }
+    
+    func createPackageTextButton() -> UIButton {
+        let textButton = UIButton.textButton(title: "Show All")
+        textButton.addTarget(self, action: #selector(didTapTextButton), for: .touchUpInside)
+        
+        return textButton
+    }
+    
+    @objc func didTapTextButton() {
+        
     }
 }
