@@ -21,12 +21,14 @@ struct HomeSearchSearchTray: View {
         delegate: nil
     )
     
+    // TODO: Inject
     @State var latestSearches: [HomeSearchSearchLocationData] = [
         .init(id: "1", name: "Kepulauan Seribu"),
         .init(id: "2", name: "Nusa Penida"),
         .init(id: "3", name: "Gili Island, Indonesia"),
     ]
     
+    // TODO: Inject
     var popularLocations: [HomeSearchSearchLocationData] = [
         .init(id: "1", name: "Raja Ampat, Indonesia"),
         .init(id: "2", name: "Komodo Island, Indonesia"),
