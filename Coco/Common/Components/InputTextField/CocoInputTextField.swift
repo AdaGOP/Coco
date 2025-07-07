@@ -39,34 +39,23 @@ struct CocoInputTextField: View {
     }
     
     var body: some View {
-        ZStack {
-            TextField(placeholder ?? "", text: $currentTypedText)
-                .textFieldStyle(
-                    CocoInputTextFieldStyle(
-                        leadingIcon: leadingIcon,
-                        isFocused: $internalFocus,
-                        placeHolder: placeholder,
-                        trailingIcon: trailingIcon
-                    )
+        TextField(placeholder ?? "", text: $currentTypedText)
+            .textFieldStyle(
+                CocoInputTextFieldStyle(
+                    leadingIcon: leadingIcon,
+                    isFocused: $internalFocus,
+                    placeHolder: placeholder,
+                    trailingIcon: trailingIcon,
+                    shouldInterceptFocus: shouldInterceptFocus,
+                    onFocusedAction: onFocusedAction
                 )
-                .focused($isFocused)
-                .onChange(of: isFocused) { isFocused in
-                    internalFocus = isFocused
-                    onFocusedAction?(isFocused)
-                }
-                .disabled(shouldInterceptFocus) // Disable interaction if intercepting
-                .font(.jakartaSans(forTextStyle: .body, weight: .medium))
-            
-            // Transparent layer to intercept taps
-            if shouldInterceptFocus {
-                Color.clear
-                    .contentShape(Rectangle())
-                    .frame(height: kInputHeight)
-                    .onTapGesture {
-                        onFocusedAction?(true) // Intercept tap here
-                    }
+            )
+            .focused($isFocused)
+            .onChange(of: isFocused) { isFocused in
+                internalFocus = isFocused
+                onFocusedAction?(isFocused)
             }
-        }
-        .frame(height: kInputHeight)
+            .font(.jakartaSans(forTextStyle: .body, weight: .medium))
+            .frame(height: kInputHeight)
     }
 }

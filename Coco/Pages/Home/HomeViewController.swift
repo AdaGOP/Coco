@@ -50,6 +50,13 @@ extension HomeViewController: HomeViewModelAction {
         thisView.toggleLoadingView(isShown: true)
     }
     
+    func constructNavBar(viewModel: HomeSearchBarViewModel) {
+        let viewController: HomeSearchBarHostingController = HomeSearchBarHostingController(viewModel: viewModel)
+        addChild(viewController)
+        thisView.addSearchBarView(from: viewController.view)
+        viewController.didMove(toParent: self)
+    }
+    
     func toggleLoadingView(isShown: Bool, after: CGFloat) {
         DispatchQueue.main.asyncAfter(deadline: .now() + after, execute: { [weak self] in
             guard let self else { return }
@@ -62,5 +69,31 @@ extension HomeViewController: HomeViewModelAction {
         let coordinator: HomeCoordinator = HomeCoordinator(navigationController: navigationController)
         coordinator.parentCoordinator = AppCoordinator.shared
         coordinator.start()
+    }
+    
+    func openSearchTray() {
+        presentTray(view: HomeSearchSearchTray(searchDidApply: { [weak self] in
+            self?.dismiss(animated: true)
+        }))
+    }
+    
+    func openFilterTray() {
+        presentTray(view: HomeSearchFilterTray(filterDidApply: { [weak self] in
+            self?.dismiss(animated: true)
+        }))
+    }
+}
+
+private extension HomeViewController {
+    func presentTray(view: some View) {
+        let trayVC: UIHostingController = UIHostingController(rootView: view)
+        if let sheet: UISheetPresentationController = trayVC.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.preferredCornerRadius = 32.0
+        }
+        present(trayVC, animated: true)
     }
 }

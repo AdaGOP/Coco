@@ -20,10 +20,11 @@ final class HomeSearchBarViewModel: ObservableObject {
     let trailingIcon: ImageHandler?
     let isTypeAble: Bool
     
-    init(currentTypedText: String, trailingIcon: ImageHandler?, isTypeAble: Bool) {
+    init(currentTypedText: String, trailingIcon: ImageHandler?, isTypeAble: Bool, delegate: HomeSearchBarViewModelDelegate?) {
         self.currentTypedText = currentTypedText
         self.trailingIcon = trailingIcon
         self.isTypeAble = isTypeAble
+        self.delegate = delegate
     }
     
     func onTextFieldFocusDidChange(to newFocus: Bool) {

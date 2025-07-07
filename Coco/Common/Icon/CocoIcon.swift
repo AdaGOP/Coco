@@ -17,4 +17,5 @@ enum CocoIcon {
     static let icPinPointBlue: Icon = Icon(iconName: "pinPointBlue")
     static let icCheckMarkFill: Icon = Icon(iconName: "checkMarkFill")
     static let icStarRating: Icon = Icon(iconName: "starRating")
+    static let icCross: Icon = Icon(iconName: "cross")
 }
