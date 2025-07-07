@@ -7,14 +7,20 @@
 
 import Foundation
 
+protocol HomeViewModelNavigationDelegate: AnyObject {
+   func notifyHomeDidSelectActivity()
+}
+
 protocol HomeViewModelAction: AnyObject {
     func constructCollectionView(viewModel: some HomeCollectionViewModelProtocol)
     func constructLoadingState(state: HomeLoadingState)
     func toggleLoadingView(isShown: Bool, after: CGFloat)
+    func activityDidSelect()
 }
 
 protocol HomeViewModelProtocol: AnyObject {
     var actionDelegate: HomeViewModelAction? { get set }
+    var navigationDelegate: HomeViewModelNavigationDelegate? { get set }
     
     func onViewDidLoad()
 }

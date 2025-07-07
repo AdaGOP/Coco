@@ -64,6 +64,16 @@ final class ConstraintBuilder {
     }
     
     @discardableResult
+    func widthAnchor(
+        to anchor: NSLayoutDimension,
+        relation: ConstraintRelation = .equal,
+        constant: CGFloat = 0
+    ) -> Self {
+        applyConstraint(from: view.widthAnchor, to: anchor, relation: relation, constant: constant)
+        return self
+    }
+    
+    @discardableResult
     func width(_ constant: CGFloat) -> Self {
         constraints.append(view.widthAnchor.constraint(equalToConstant: constant))
         return self

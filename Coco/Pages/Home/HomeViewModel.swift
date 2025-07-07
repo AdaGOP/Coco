@@ -9,6 +9,7 @@ import Foundation
 
 final class HomeViewModel {
     weak var actionDelegate: (any HomeViewModelAction)?
+    weak var navigationDelegate: (any HomeViewModelNavigationDelegate)?
     
     init(activityFetcher: ActivityFetcherProtocol = ActivityFetcher()) {
         self.activityFetcher = activityFetcher
@@ -48,6 +49,6 @@ extension HomeViewModel: HomeViewModelProtocol {
 
 extension HomeViewModel: HomeCollectionViewModelDelegate {
     func notifyCollectionViewActivityDidTap(_ dataModel: HomeActivityCellDataModel) {
-        // wiring to detail
+        actionDelegate?.activityDidSelect()
     }
 }
