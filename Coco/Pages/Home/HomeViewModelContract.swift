@@ -14,8 +14,13 @@ protocol HomeViewModelNavigationDelegate: AnyObject {
 protocol HomeViewModelAction: AnyObject {
     func constructCollectionView(viewModel: some HomeCollectionViewModelProtocol)
     func constructLoadingState(state: HomeLoadingState)
+    func constructNavBar(viewModel: HomeSearchBarViewModel)
+    
     func toggleLoadingView(isShown: Bool, after: CGFloat)
     func activityDidSelect()
+    
+    func openSearchTray()
+    func openFilterTray()
 }
 
 protocol HomeViewModelProtocol: AnyObject {

@@ -16,17 +16,23 @@ struct CocoInputTextFieldStyle: TextFieldStyle {
     let leadingIcon: UIImage?
     let placeHolder: String?
     let trailingIcon: ImageHandler?
+    let shouldInterceptFocus: Bool
+    let onFocusedAction: ((Bool) -> Void)?
     
     init(
         leadingIcon: UIImage?,
         isFocused: Binding<Bool>,
         placeHolder: String?,
-        trailingIcon: ImageHandler?
+        trailingIcon: ImageHandler?,
+        shouldInterceptFocus: Bool,
+        onFocusedAction: ((Bool) -> Void)?
     ) {
         self.leadingIcon = leadingIcon
         _isFocused = isFocused
         self.placeHolder = placeHolder
         self.trailingIcon = trailingIcon
+        self.shouldInterceptFocus = shouldInterceptFocus
+        self.onFocusedAction = onFocusedAction
     }
     
     func _body(configuration: TextField<Self._Label>) -> some View {
@@ -38,9 +44,23 @@ struct CocoInputTextFieldStyle: TextFieldStyle {
                     .frame(width: 18.0, height: 18.0)
             }
             
-            configuration
-                
-            
+            ZStack {
+                GeometryReader { proxy in
+                    configuration
+                        .disabled(shouldInterceptFocus) // Disable interaction if intercepting
+                    
+                    // Transparent layer to intercept taps
+                    if shouldInterceptFocus {
+                        Color.clear
+                            .contentShape(Rectangle())
+                            .frame(width: proxy.size.width - (trailingIcon != nil ? 20.0 : 0), height: 52.0)
+                            .onTapGesture {
+                                onFocusedAction?(true)
+                            }
+                    }
+                }
+            }
+
             Spacer()
                 
             if let trailingIcon: ImageHandler {

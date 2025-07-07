@@ -22,12 +22,21 @@ final class HomeViewModel {
         return viewModel
     }()
     private lazy var loadingState: HomeLoadingState = HomeLoadingState()
+    private lazy var searchBarViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
+        currentTypedText: "",
+        trailingIcon: (image: CocoIcon.icFilterIcon.image, didTap: { [weak self] in
+            self?.actionDelegate?.openFilterTray()
+        }),
+        isTypeAble: false,
+        delegate: self
+    )
 }
 
 extension HomeViewModel: HomeViewModelProtocol {
     func onViewDidLoad() {
         actionDelegate?.constructCollectionView(viewModel: collectionViewModel)
         actionDelegate?.constructLoadingState(state: loadingState)
+        actionDelegate?.constructNavBar(viewModel: searchBarViewModel)
         
         activityFetcher.fetchActivity(endpoint: .all) { [weak self] result in
             guard let self else { return }
@@ -50,5 +59,13 @@ extension HomeViewModel: HomeViewModelProtocol {
 extension HomeViewModel: HomeCollectionViewModelDelegate {
     func notifyCollectionViewActivityDidTap(_ dataModel: HomeActivityCellDataModel) {
         actionDelegate?.activityDidSelect()
+    }
+}
+
+extension HomeViewModel: HomeSearchBarViewModelDelegate {
+    func notifyHomeSearchBarDidTap(isTypeAble: Bool) {
+        guard !isTypeAble else { return }
+        
+        actionDelegate?.openSearchTray()
     }
 }

@@ -41,6 +41,11 @@ final class HomeView: UIView {
         loadingView.isHidden = !isShown
     }
     
+    func addSearchBarView(from view: UIView) {
+        searchBarView.subviews.forEach { $0.removeFromSuperview() }
+        searchBarView.addSubviewAndLayout(view, insets: .init(vertical: 0, horizontal: 24.0))
+    }
+    
     private lazy var errorView: UIView = UIView()
     private lazy var contentStackView: UIStackView = createContentStackView()
     private lazy var searchBarView: UIView = UIView()
@@ -64,7 +69,7 @@ private extension HomeView {
             searchResultView,
         ])
         stackView.axis = .vertical
-        stackView.spacing = 24.0
+        stackView.spacing = 12.0
         return stackView
     }
 }

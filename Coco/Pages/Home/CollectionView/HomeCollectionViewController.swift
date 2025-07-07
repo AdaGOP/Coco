@@ -82,7 +82,7 @@ private extension HomeCollectionViewController {
     func createCollectionView() -> UICollectionView {
         let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.contentInset = .init(top: 16.0, left: 0, bottom: 8.0, right: 0)
+        collectionView.contentInset = .init(top: 0, left: 0, bottom: 8.0, right: 0)
         
         return collectionView
     }
