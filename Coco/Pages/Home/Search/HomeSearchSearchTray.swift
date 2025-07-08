@@ -14,28 +14,30 @@ struct HomeSearchSearchLocationData {
 }
 
 struct HomeSearchSearchTray: View {
-    @StateObject var viewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
-        currentTypedText: "",
-        trailingIcon: nil,
-        isTypeAble: true,
-        delegate: nil
-    )
+    @StateObject var viewModel: HomeSearchBarViewModel
     
-    // TODO: Inject
-    @State var latestSearches: [HomeSearchSearchLocationData] = [
-        .init(id: "1", name: "Kepulauan Seribu"),
-        .init(id: "2", name: "Nusa Penida"),
-        .init(id: "3", name: "Gili Island, Indonesia"),
-    ]
+    @State var latestSearches: [HomeSearchSearchLocationData]
+    @State var popularLocations: [HomeSearchSearchLocationData]
     
-    // TODO: Inject
-    var popularLocations: [HomeSearchSearchLocationData] = [
-        .init(id: "1", name: "Raja Ampat, Indonesia"),
-        .init(id: "2", name: "Komodo Island, Indonesia"),
-        .init(id: "3", name: "Gili Island, Indonesia"),
-    ]
+    let searchDidApply: ((_ query: String) -> Void)
     
-    let searchDidApply: (() -> Void)
+    init(
+        selectedQuery: String,
+        latestSearches: [HomeSearchSearchLocationData],
+        popularLocations: [HomeSearchSearchLocationData],
+        searchDidApply: @escaping (_: String) -> Void
+    ) {
+        _viewModel = StateObject(wrappedValue: HomeSearchBarViewModel(
+            currentTypedText: selectedQuery,
+            trailingIcon: nil,
+            isTypeAble: true,
+            delegate: nil
+        ))
+        
+        self.latestSearches = latestSearches
+        self.popularLocations = popularLocations
+        self.searchDidApply = searchDidApply
+    }
     
     var body: some View {
         VStack(alignment: .center) {
@@ -63,7 +65,7 @@ struct HomeSearchSearchTray: View {
                     Spacer()
                     CocoButton(
                         action: {
-                            searchDidApply()
+                            searchDidApply(viewModel.currentTypedText)
                         },
                         text: "Search",
                         style: .large,
@@ -102,6 +104,9 @@ private extension HomeSearchSearchTray {
             Text(name)
                 .font(.jakartaSans(forTextStyle: .callout, weight: .medium))
                 .foregroundStyle(Token.additionalColorsBlack.toColor())
+        }
+        .onTapGesture {
+            viewModel.currentTypedText = name
         }
     }
     
