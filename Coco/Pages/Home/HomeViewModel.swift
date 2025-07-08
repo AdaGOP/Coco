@@ -42,6 +42,13 @@ extension HomeViewModel: HomeViewModelProtocol {
         
         fetch()
     }
+    
+    func onSearchDidApply(_ queryText: String) {
+        searchBarViewModel.currentTypedText = queryText
+        loadingState.percentage = 0
+        actionDelegate?.toggleLoadingView(isShown: true, after: 0)
+        fetch()
+    }
 }
 
 extension HomeViewModel: HomeCollectionViewModelDelegate {

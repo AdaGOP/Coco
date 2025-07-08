@@ -12,7 +12,8 @@ struct HomeSearchSearchTray: View {
     @StateObject var viewModel: HomeSearchSearchTrayViewModel
     
     @State var latestSearches: [HomeSearchSearchLocationData]
-    let searchDidApply: ((_: String) -> Void)
+    
+    let searchDidApply: ((_ query: String) -> Void)
     
     init(
         selectedQuery: String,

@@ -31,4 +31,5 @@ protocol HomeViewModelProtocol: AnyObject {
     var navigationDelegate: HomeViewModelNavigationDelegate? { get set }
     
     func onViewDidLoad()
+    func onSearchDidApply(_ queryText: String)
 }
