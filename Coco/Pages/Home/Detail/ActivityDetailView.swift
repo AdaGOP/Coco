@@ -551,6 +551,8 @@ private extension ActivityDetailView {
     
     @objc func didTapTextButton() {
         isPackageButtonStateHidden.toggle()
+        
+        packageButton.setTitle(isPackageButtonStateHidden ? "Show less" : "Show All", for: .normal)
         delegate?.notifyPackagesButtonDidTap(shouldShowAll: !isPackageButtonStateHidden)
     }
 }
