@@ -60,7 +60,7 @@ extension HomeViewController: HomeViewModelAction {
     func toggleLoadingView(isShown: Bool, after: CGFloat) {
         DispatchQueue.main.asyncAfter(deadline: .now() + after, execute: { [weak self] in
             guard let self else { return }
-            self.thisView.toggleLoadingView(isShown: false)
+            self.thisView.toggleLoadingView(isShown: isShown)
         })
     }
     
@@ -76,10 +76,19 @@ extension HomeViewController: HomeViewModelAction {
         coordinator.start()
     }
     
-    func openSearchTray() {
-        presentTray(view: HomeSearchSearchTray(searchDidApply: { [weak self] in
+    func openSearchTray(
+        selectedQuery: String,
+        latestSearches: [HomeSearchSearchLocationData],
+        popularLocations: [HomeSearchSearchLocationData]
+    ) {
+        presentTray(view: HomeSearchSearchTray(
+            selectedQuery: selectedQuery,
+            latestSearches: latestSearches,
+            popularLocations: popularLocations
+        ) { [weak self] queryText in
             self?.dismiss(animated: true)
-        }))
+            self?.viewModel.onSearchDidApply(queryText)
+        })
     }
     
     func openFilterTray() {

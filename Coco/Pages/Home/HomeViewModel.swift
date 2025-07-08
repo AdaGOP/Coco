@@ -42,6 +42,13 @@ extension HomeViewModel: HomeViewModelProtocol {
         
         fetch()
     }
+    
+    func onSearchDidApply(_ queryText: String) {
+        searchBarViewModel.currentTypedText = queryText
+        loadingState.percentage = 0
+        actionDelegate?.toggleLoadingView(isShown: true, after: 0)
+        fetch()
+    }
 }
 
 extension HomeViewModel: HomeCollectionViewModelDelegate {
@@ -56,7 +63,20 @@ extension HomeViewModel: HomeSearchBarViewModelDelegate {
     func notifyHomeSearchBarDidTap(isTypeAble: Bool) {
         guard !isTypeAble else { return }
         
-        actionDelegate?.openSearchTray()
+        // TODO: Change with real data
+        actionDelegate?.openSearchTray(
+            selectedQuery: searchBarViewModel.currentTypedText,
+            latestSearches: [
+                .init(id: "1", name: "Kepulauan Seribu"),
+                .init(id: "2", name: "Nusa Penida"),
+                .init(id: "3", name: "Gili Island, Indonesia"),
+            ],
+            popularLocations: [
+                .init(id: "1", name: "Raja Ampat, Indonesia"),
+                .init(id: "2", name: "Komodo Island, Indonesia"),
+                .init(id: "3", name: "Gili Island, Indonesia"),
+            ]
+        )
     }
 }
 
