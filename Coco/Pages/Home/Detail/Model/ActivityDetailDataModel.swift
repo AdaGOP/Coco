@@ -18,6 +18,7 @@ struct ActivityDetailDataModel {
     let tnc: ActivitySectionLayout<[String]>
     
     let availablePackages: ActivitySectionLayout<[Package]>
+    let hiddenPackages: [Package]
     
     struct ProviderDetail {
         let name: String
@@ -31,6 +32,48 @@ struct ActivityDetailDataModel {
         let location: String
         let rating: String
         let price: String
+    }
+    
+    init(_ response: Activity) {
+        title = response.title
+        location = response.destination.name
+        imageUrlsString = response.images.map { $0.imageUrl }
+        
+        detailInfomation = ActivitySectionLayout(
+            title: "Details",
+            content: response.description
+        )
+        providerDetail = ActivitySectionLayout(
+            title: "Trip Provider",
+            content: ProviderDetail(
+                name: response.destination.name,
+                description: response.destination.description,
+                imageUrlString: response.destination.imageUrl ?? ""
+            )
+        )
+        tripFacilities = ActivitySectionLayout(
+            title: "This Trip Includes",
+            content: response.accessories.map { $0.name }
+        )
+        tnc = ActivitySectionLayout(
+            title: "Terms and Condition",
+            content: [] // TODO: Wiring
+        )
+        
+        availablePackages = ActivitySectionLayout(
+            title: "Available Packages",
+            content: response.packages.map {
+                Package(
+                    imageUrlString: "https://picsum.photos/id/237/600/341", // TODO: WIRING
+                    name: $0.name,
+                    location: "TODO", // TODO: WIRING
+                    rating: "TODO", // TODO: WIRING
+                    price: "\($0.pricePerPerson)"
+                )
+            }
+        )
+        
+        hiddenPackages = Array(availablePackages.content.prefix(1))
     }
 }
 

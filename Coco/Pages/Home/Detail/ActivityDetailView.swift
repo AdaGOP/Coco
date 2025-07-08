@@ -8,7 +8,13 @@
 import Foundation
 import UIKit
 
+protocol ActivityDetailViewDelegate: AnyObject {
+    func notifyPackagesButtonDidTap(shouldShowAll: Bool)
+}
+
 final class ActivityDetailView: UIView {
+    weak var delegate: ActivityDetailViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -49,27 +55,44 @@ final class ActivityDetailView: UIView {
         )
         
         // Facilities
-        contentStackView.addArrangedSubview(
-            createSectionView(
-                title: data.tripFacilities.title,
-                view: createBenefitListView(titles: data.tripFacilities.content)
+        if !data.tripFacilities.content.isEmpty {
+            contentStackView.addArrangedSubview(
+                createSectionView(
+                    title: data.tripFacilities.title,
+                    view: createBenefitListView(titles: data.tripFacilities.content)
+                )
             )
-        )
-        
-        // TnC
-        contentStackView.addArrangedSubview(
-            createSectionView(
-                title: data.tnc.title,
-                view: createBenefitListView(titles: data.tnc.content)
-            )
-        )
-        
-        contentStackView.addArrangedSubview(packageSection)
-        data.availablePackages.content.forEach { data in
-            packageContainer.addArrangedSubview(createPackageView(data: data))
         }
         
-        packageLabel.text = data.availablePackages.title
+        // TnC
+        if !data.tnc.content.isEmpty {
+            contentStackView.addArrangedSubview(
+                createSectionView(
+                    title: data.tnc.title,
+                    view: createBenefitListView(titles: data.tnc.content)
+                )
+            )
+        }
+        
+        if !data.availablePackages.content.isEmpty {
+            contentStackView.addArrangedSubview(packageSection)
+            
+            if data.availablePackages.content.count == data.hiddenPackages.count {
+                packageButton.isHidden = true
+                data.availablePackages.content.forEach { data in
+                    packageContainer.addArrangedSubview(createPackageView(data: data))
+                }
+            }
+            else {
+                data.hiddenPackages.forEach { data in
+                    packageContainer.addArrangedSubview(createPackageView(data: data))
+                }
+            }
+            
+            packageLabel.text = data.availablePackages.title
+        }
+        
+        packageLabel.isHidden = data.availablePackages.content.isEmpty
     }
     
     func addImageSliderView(with view: UIView) {
@@ -82,7 +105,26 @@ final class ActivityDetailView: UIView {
     }
     
     func updatePackageData(_ data: [ActivityDetailDataModel.Package]) {
+        packageContainer.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
+        for (index, item) in data.enumerated() {
+            let view: UIView = createPackageView(data: item)
+            view.alpha = 0
+            view.transform = CGAffineTransform(translationX: 0, y: 8)
+            packageContainer.addArrangedSubview(view)
+
+            UIView.animate(
+                withDuration: 0.3,
+                delay: 0.05 * Double(index),
+                usingSpringWithDamping: 0.8,
+                initialSpringVelocity: 0.5,
+                options: [.curveEaseOut],
+                animations: {
+                    view.alpha = 1
+                    view.transform = .identity
+                }
+            )
+        }
     }
     
     private lazy var imageSliderView: UIView = UIView()
@@ -105,11 +147,13 @@ final class ActivityDetailView: UIView {
         textColor: Token.additionalColorsBlack,
         numberOfLines: 2
     )
-    private lazy var packageButton = createPackageTextButton()
+    private lazy var packageButton: UIButton = createPackageTextButton()
     
     private lazy var packageContainer: UIStackView = createStackView(spacing: 18.0)
     private lazy var contentStackView: UIStackView = createStackView(spacing: 29.0)
     private lazy var headerStackView: UIStackView = createStackView(spacing: 0)
+    
+    private lazy var isPackageButtonStateHidden: Bool = true
 }
 
 extension ActivityDetailView {
@@ -461,11 +505,13 @@ private extension ActivityDetailView {
             packageButton
         ])
         
-        packageLabel.setContentHuggingPriority(.defaultLow - 1, for: .horizontal)
+        packageButton.setContentHuggingPriority(.required, for: .horizontal)
+        packageButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         
         packageLabel.layout {
             $0.leading(to: containerView.leadingAnchor)
-                .centerY(to: containerView.centerYAnchor)
+                .top(to: containerView.topAnchor)
+                .bottom(to: containerView.bottomAnchor)
         }
         
         packageButton.layout {
@@ -497,13 +543,14 @@ private extension ActivityDetailView {
     }
     
     func createPackageTextButton() -> UIButton {
-        let textButton = UIButton.textButton(title: "Show All")
+        let textButton: UIButton = UIButton.textButton(title: "Show All")
         textButton.addTarget(self, action: #selector(didTapTextButton), for: .touchUpInside)
         
         return textButton
     }
     
     @objc func didTapTextButton() {
-        
+        isPackageButtonStateHidden.toggle()
+        delegate?.notifyPackagesButtonDidTap(shouldShowAll: !isPackageButtonStateHidden)
     }
 }

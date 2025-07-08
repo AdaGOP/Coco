@@ -64,9 +64,14 @@ extension HomeViewController: HomeViewModelAction {
         })
     }
     
-    func activityDidSelect() {
+    func activityDidSelect(data: ActivityDetailDataModel) {
         guard let navigationController else { return }
-        let coordinator: HomeCoordinator = HomeCoordinator(navigationController: navigationController)
+        let coordinator: HomeCoordinator = HomeCoordinator(
+            input: .init(
+                navigationController: navigationController,
+                flow: .activityDetail(data: data)
+            )
+        )
         coordinator.parentCoordinator = AppCoordinator.shared
         coordinator.start()
     }

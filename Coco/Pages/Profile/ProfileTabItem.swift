@@ -18,8 +18,4 @@ struct ProfileTabItem: TabItemRepresentable {
         vc.title = "Profile"
         return vc
     }
-    
-    func getBaseCoordinator(navigationController: UINavigationController) -> BaseCoordinator {
-        ProfileCoordinator(navigationController: navigationController)
-    }
 }

@@ -20,10 +20,6 @@ struct HomeTabItem: TabItemRepresentable {
         return viewController
     }
     
-    func getBaseCoordinator(navigationController: UINavigationController) -> BaseCoordinator {
-        HomeCoordinator(navigationController: navigationController)
-    }
-    
     private let viewModel = HomeCollectionViewModel()
     
     private let vm = HomeLoadingState()

@@ -25,6 +25,7 @@ final class ActivityDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        thisView.delegate = self
         viewModel.onViewDidLoad()
     }
     
@@ -50,5 +51,11 @@ extension ActivityDetailViewController: ActivityDetailViewModelAction {
     
     func updatePackageData(data: [ActivityDetailDataModel.Package]) {
         thisView.updatePackageData(data)
+    }
+}
+
+extension ActivityDetailViewController: ActivityDetailViewDelegate {
+    func notifyPackagesButtonDidTap(shouldShowAll: Bool) {
+        viewModel.onPackageDetailStateDidChange(shouldShowAll: shouldShowAll)
     }
 }

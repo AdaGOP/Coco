@@ -18,8 +18,4 @@ struct MyTripTabItem: TabItemRepresentable {
         vc.title = "MyTrip"
         return vc
     }
-    
-    func getBaseCoordinator(navigationController: UINavigationController) -> BaseCoordinator {
-        MyTripCoordinator(navigationController: navigationController)
-    }
 }
