@@ -14,5 +14,5 @@ protocol TabItemRepresentable {
     
     /// Returns the root view controller (usually wrapped in a navigation controller)
     func makeRootViewController() -> UIViewController
-    func getBaseCoordinator(navigationController: UINavigationController) -> BaseCoordinator
+//    func getBaseCoordinator(navigationController: UINavigationController) -> BaseCoordinator
 }

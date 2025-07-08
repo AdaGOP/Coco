@@ -30,6 +30,8 @@ final class HomeViewModel {
         isTypeAble: false,
         delegate: self
     )
+    
+    private var responseMap: [Int: Activity] = [:]
 }
 
 extension HomeViewModel: HomeViewModelProtocol {
@@ -38,27 +40,15 @@ extension HomeViewModel: HomeViewModelProtocol {
         actionDelegate?.constructLoadingState(state: loadingState)
         actionDelegate?.constructNavBar(viewModel: searchBarViewModel)
         
-        activityFetcher.fetchActivity(endpoint: .all) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let response):
-                DispatchQueue.main.async {
-                    self.loadingState.percentage = 100
-                    self.actionDelegate?.toggleLoadingView(isShown: false, after: 1.0)
-                }
-                
-                let sectionData: [HomeActivityCellDataModel] = response.values.map { HomeActivityCellDataModel(activity: $0) }
-                collectionViewModel.updateActivity(activity: (title: "", dataModel: sectionData))
-            case .failure(let failure):
-                break
-            }
-        }
+        fetch()
     }
 }
 
 extension HomeViewModel: HomeCollectionViewModelDelegate {
     func notifyCollectionViewActivityDidTap(_ dataModel: HomeActivityCellDataModel) {
-        actionDelegate?.activityDidSelect()
+        guard let activity: Activity = responseMap[dataModel.id] else { return }
+        let data: ActivityDetailDataModel = ActivityDetailDataModel(activity)
+        actionDelegate?.activityDidSelect(data: data)
     }
 }
 
@@ -67,5 +57,32 @@ extension HomeViewModel: HomeSearchBarViewModelDelegate {
         guard !isTypeAble else { return }
         
         actionDelegate?.openSearchTray()
+    }
+}
+
+private extension HomeViewModel {
+    func fetch() {
+        activityFetcher.fetchActivity(
+            request: ActivitySearchRequest(pSearchText: searchBarViewModel.currentTypedText),
+            endpoint: .all
+        ) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.loadingState.percentage = 100
+                    self.actionDelegate?.toggleLoadingView(isShown: false, after: 1.0)
+                }
+                
+                var sectionData: [HomeActivityCellDataModel] = []
+                response.values.forEach {
+                    sectionData.append(HomeActivityCellDataModel(activity: $0))
+                    self.responseMap[$0.id] = $0
+                }
+                collectionViewModel.updateActivity(activity: (title: "", dataModel: sectionData))
+            case .failure(let failure):
+                break
+            }
+        }
     }
 }

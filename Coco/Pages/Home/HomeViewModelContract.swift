@@ -17,7 +17,7 @@ protocol HomeViewModelAction: AnyObject {
     func constructNavBar(viewModel: HomeSearchBarViewModel)
     
     func toggleLoadingView(isShown: Bool, after: CGFloat)
-    func activityDidSelect()
+    func activityDidSelect(data: ActivityDetailDataModel)
     
     func openSearchTray()
     func openFilterTray()
