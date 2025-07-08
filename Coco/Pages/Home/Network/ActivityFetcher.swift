@@ -10,8 +10,10 @@ import Foundation
 protocol ActivityFetcherProtocol: AnyObject {
     func fetchActivity(
         request: ActivitySearchRequest,
-        endpoint: ActivityEndpoint,
         completion: @escaping (Result<ActivityModelArray, NetworkServiceError>) -> Void
+    )
+    func fetchTopDestination(
+        completion: @escaping (Result<ActivityTopDestinationModelArray, NetworkServiceError>) -> Void
     )
 }
 
@@ -22,13 +24,25 @@ final class ActivityFetcher: ActivityFetcherProtocol {
     
     func fetchActivity(
         request: ActivitySearchRequest,
-        endpoint: ActivityEndpoint,
         completion: @escaping (Result<ActivityModelArray, NetworkServiceError>) -> Void
     ) {
         networkService.request(
-            urlString: endpoint.urlString,
+            urlString: ActivityEndpoint.all.urlString,
             method: .post,
             parameters: request.toDictionary() ?? [:],
+            headers: [:],
+            body: nil,
+            completion: completion
+        )
+    }
+    
+    func fetchTopDestination(
+        completion: @escaping (Result<ActivityTopDestinationModelArray, NetworkServiceError>) -> Void
+    ) {
+        networkService.request(
+            urlString: ActivityEndpoint.topDestination.urlString,
+            method: .post,
+            parameters: [:],
             headers: [:],
             body: nil,
             completion: completion

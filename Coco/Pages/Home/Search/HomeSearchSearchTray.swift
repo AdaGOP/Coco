@@ -8,34 +8,31 @@
 import Foundation
 import SwiftUI
 
-struct HomeSearchSearchLocationData {
-    let id: String
-    let name: String
-}
-
 struct HomeSearchSearchTray: View {
-    @StateObject var viewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
-        currentTypedText: "",
-        trailingIcon: nil,
-        isTypeAble: true,
-        delegate: nil
-    )
+    @StateObject var viewModel: HomeSearchSearchTrayViewModel
     
-    // TODO: Inject
-    @State var latestSearches: [HomeSearchSearchLocationData] = [
-        .init(id: "1", name: "Kepulauan Seribu"),
-        .init(id: "2", name: "Nusa Penida"),
-        .init(id: "3", name: "Gili Island, Indonesia"),
-    ]
+    @State var latestSearches: [HomeSearchSearchLocationData]
+    let searchDidApply: ((_: String) -> Void)
     
-    // TODO: Inject
-    var popularLocations: [HomeSearchSearchLocationData] = [
-        .init(id: "1", name: "Raja Ampat, Indonesia"),
-        .init(id: "2", name: "Komodo Island, Indonesia"),
-        .init(id: "3", name: "Gili Island, Indonesia"),
-    ]
-    
-    let searchDidApply: (() -> Void)
+    init(
+        selectedQuery: String,
+        latestSearches: [HomeSearchSearchLocationData],
+        searchDidApply: @escaping (_: String) -> Void
+    ) {
+        _viewModel = StateObject(
+            wrappedValue: HomeSearchSearchTrayViewModel(
+                searchBarViewModel: HomeSearchBarViewModel(
+                    currentTypedText: selectedQuery,
+                    trailingIcon: nil,
+                    isTypeAble: true,
+                    delegate: nil
+                )
+            )
+        )
+        
+        self.latestSearches = latestSearches
+        self.searchDidApply = searchDidApply
+    }
     
     var body: some View {
         VStack(alignment: .center) {
@@ -46,7 +43,7 @@ struct HomeSearchSearchTray: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 24.0) {
-                    HomeSearchBarView(viewModel: viewModel)
+                    HomeSearchBarView(viewModel: viewModel.searchBarViewModel)
                     
                     if !latestSearches.isEmpty {
                         createSectionView(title: "Last Search") {
@@ -54,7 +51,7 @@ struct HomeSearchSearchTray: View {
                         }
                     }
                     
-                    if !popularLocations.isEmpty {
+                    if !viewModel.popularLocations.isEmpty {
                         createSectionView(title: "Popular Location") {
                             popularLocationSectionView()
                         }
@@ -63,7 +60,7 @@ struct HomeSearchSearchTray: View {
                     Spacer()
                     CocoButton(
                         action: {
-                            searchDidApply()
+                            searchDidApply(viewModel.searchBarViewModel.currentTypedText)
                         },
                         text: "Search",
                         style: .large,
@@ -77,6 +74,9 @@ struct HomeSearchSearchTray: View {
         .padding(24.0)
         .background(Color.white)
         .cornerRadius(16)
+        .onAppear {
+            viewModel.onAppear()
+        }
     }
 }
 
@@ -102,6 +102,9 @@ private extension HomeSearchSearchTray {
             Text(name)
                 .font(.jakartaSans(forTextStyle: .callout, weight: .medium))
                 .foregroundStyle(Token.additionalColorsBlack.toColor())
+        }
+        .onTapGesture {
+            viewModel.searchBarViewModel.currentTypedText = name
         }
     }
     
@@ -143,10 +146,10 @@ private extension HomeSearchSearchTray {
     
     func popularLocationSectionView() -> some View {
         VStack(alignment: .leading, spacing: 15.0) {
-            ForEach(Array(popularLocations.enumerated()), id: \.0) { (index, location) in
+            ForEach(Array(viewModel.popularLocations.enumerated()), id: \.0) { (index, location) in
                 createLocationView(name: location.name)
                 
-                if index < popularLocations.count {
+                if index < viewModel.popularLocations.count {
                     Rectangle()
                         .frame(maxWidth: .infinity)
                         .frame(height: 1.0)

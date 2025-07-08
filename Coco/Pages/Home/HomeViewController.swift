@@ -76,8 +76,14 @@ extension HomeViewController: HomeViewModelAction {
         coordinator.start()
     }
     
-    func openSearchTray() {
-        presentTray(view: HomeSearchSearchTray(searchDidApply: { [weak self] in
+    func openSearchTray(
+        selectedQuery: String,
+        latestSearches: [HomeSearchSearchLocationData]
+    ) {
+        presentTray(view: HomeSearchSearchTray(
+            selectedQuery: selectedQuery,
+            latestSearches: latestSearches
+        ) { [weak self] queryText in
             self?.dismiss(animated: true)
         }))
     }
