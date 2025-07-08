@@ -21,8 +21,7 @@ protocol HomeViewModelAction: AnyObject {
     
     func openSearchTray(
         selectedQuery: String,
-        latestSearches: [HomeSearchSearchLocationData],
-        popularLocations: [HomeSearchSearchLocationData]
+        latestSearches: [HomeSearchSearchLocationData]
     )
     func openFilterTray()
 }

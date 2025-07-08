@@ -78,13 +78,11 @@ extension HomeViewController: HomeViewModelAction {
     
     func openSearchTray(
         selectedQuery: String,
-        latestSearches: [HomeSearchSearchLocationData],
-        popularLocations: [HomeSearchSearchLocationData]
+        latestSearches: [HomeSearchSearchLocationData]
     ) {
         presentTray(view: HomeSearchSearchTray(
             selectedQuery: selectedQuery,
-            latestSearches: latestSearches,
-            popularLocations: popularLocations
+            latestSearches: latestSearches
         ) { [weak self] queryText in
             self?.dismiss(animated: true)
             self?.viewModel.onSearchDidApply(queryText)

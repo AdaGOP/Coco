@@ -8,34 +8,30 @@
 import Foundation
 import SwiftUI
 
-struct HomeSearchSearchLocationData {
-    let id: String
-    let name: String
-}
-
 struct HomeSearchSearchTray: View {
-    @StateObject var viewModel: HomeSearchBarViewModel
+    @StateObject var viewModel: HomeSearchSearchTrayViewModel
     
     @State var latestSearches: [HomeSearchSearchLocationData]
-    @State var popularLocations: [HomeSearchSearchLocationData]
     
     let searchDidApply: ((_ query: String) -> Void)
     
     init(
         selectedQuery: String,
         latestSearches: [HomeSearchSearchLocationData],
-        popularLocations: [HomeSearchSearchLocationData],
         searchDidApply: @escaping (_: String) -> Void
     ) {
-        _viewModel = StateObject(wrappedValue: HomeSearchBarViewModel(
-            currentTypedText: selectedQuery,
-            trailingIcon: nil,
-            isTypeAble: true,
-            delegate: nil
-        ))
+        _viewModel = StateObject(
+            wrappedValue: HomeSearchSearchTrayViewModel(
+                searchBarViewModel: HomeSearchBarViewModel(
+                    currentTypedText: selectedQuery,
+                    trailingIcon: nil,
+                    isTypeAble: true,
+                    delegate: nil
+                )
+            )
+        )
         
         self.latestSearches = latestSearches
-        self.popularLocations = popularLocations
         self.searchDidApply = searchDidApply
     }
     
@@ -48,7 +44,7 @@ struct HomeSearchSearchTray: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 24.0) {
-                    HomeSearchBarView(viewModel: viewModel)
+                    HomeSearchBarView(viewModel: viewModel.searchBarViewModel)
                     
                     if !latestSearches.isEmpty {
                         createSectionView(title: "Last Search") {
@@ -56,7 +52,7 @@ struct HomeSearchSearchTray: View {
                         }
                     }
                     
-                    if !popularLocations.isEmpty {
+                    if !viewModel.popularLocations.isEmpty {
                         createSectionView(title: "Popular Location") {
                             popularLocationSectionView()
                         }
@@ -65,7 +61,7 @@ struct HomeSearchSearchTray: View {
                     Spacer()
                     CocoButton(
                         action: {
-                            searchDidApply(viewModel.currentTypedText)
+                            searchDidApply(viewModel.searchBarViewModel.currentTypedText)
                         },
                         text: "Search",
                         style: .large,
@@ -79,6 +75,9 @@ struct HomeSearchSearchTray: View {
         .padding(24.0)
         .background(Color.white)
         .cornerRadius(16)
+        .onAppear {
+            viewModel.onAppear()
+        }
     }
 }
 
@@ -106,7 +105,7 @@ private extension HomeSearchSearchTray {
                 .foregroundStyle(Token.additionalColorsBlack.toColor())
         }
         .onTapGesture {
-            viewModel.currentTypedText = name
+            viewModel.searchBarViewModel.currentTypedText = name
         }
     }
     
@@ -148,10 +147,10 @@ private extension HomeSearchSearchTray {
     
     func popularLocationSectionView() -> some View {
         VStack(alignment: .leading, spacing: 15.0) {
-            ForEach(Array(popularLocations.enumerated()), id: \.0) { (index, location) in
+            ForEach(Array(viewModel.popularLocations.enumerated()), id: \.0) { (index, location) in
                 createLocationView(name: location.name)
                 
-                if index < popularLocations.count {
+                if index < viewModel.popularLocations.count {
                     Rectangle()
                         .frame(maxWidth: .infinity)
                         .frame(height: 1.0)

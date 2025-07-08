@@ -52,39 +52,40 @@ final class NetworkService: NetworkServiceProtocol {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
             } catch {
-                completion(.failure(.bodyParsingFailed))
+                completeOnMain(.failure(.bodyParsingFailed), completion)
                 return nil
             }
         }
 
-        let task: URLSessionDataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task: URLSessionDataTask = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let self else { return }
             NetworkLogger.logResponse(data: data, response: response, error: error)
             
             if let error: Error = error {
                 let nsError: NSError = error as NSError
                 if nsError.code == NSURLErrorNotConnectedToInternet {
-                    completion(.failure(.noInternetConnection))
+                    completeOnMain(.failure(.noInternetConnection), completion)
                     return
                 }
                 assertionFailure("Request Failed")
-                completion(.failure(.requestFailed(error)))
+                completeOnMain(.failure(.requestFailed(error)), completion)
                 return
             }
 
             guard let httpResponse: HTTPURLResponse = response as? HTTPURLResponse else {
                 assertionFailure("invalid Response")
-                completion(.failure(.invalidResponse))
+                completeOnMain(.failure(.invalidResponse), completion)
                 return
             }
 
             guard (200..<300).contains(httpResponse.statusCode) else {
-                completion(.failure(.statusCode(httpResponse.statusCode)))
+                completeOnMain(.failure(.statusCode(httpResponse.statusCode)), completion)
                 return
             }
 
             // Decode response
             guard let data: Data = data else {
-                completion(.failure(.invalidResponse))
+                completeOnMain(.failure(.invalidResponse), completion)
                 return
             }
 
@@ -94,26 +95,34 @@ final class NetworkService: NetworkServiceProtocol {
                 if let arrayType: any JSONArrayProtocol.Type = T.self as? JSONArrayProtocol.Type,
                    let jsonArray: [JSONObject] = jsonObject as? [JSONObject] {
                     if let typedArray: T = try? arrayType.init(jsonArray: jsonArray) as? T {
-                        completion(.success(typedArray))
+                        completeOnMain(.success(typedArray), completion)
                         return
                     } else {
-                        completion(.failure(.decodingFailed(NSError(domain: "Failed to cast JSONArray", code: -1))))
+                        completeOnMain(.failure(.decodingFailed(NSError(domain: "Failed to cast JSONArray", code: -1))), completion)
                         return
                     }
                 }
 
                 if let jsonDict: JSONObject = jsonObject as? JSONObject {
                     let decoded = try T(json: jsonDict)
-                    completion(.success(decoded))
+                    completeOnMain(.success(decoded), completion)
                     return
                 }
             } catch {
                 assertionFailure("Decoding has Failed with Error: \(error)")
-                completion(.failure(.decodingFailed(error)))
+                completeOnMain(.failure(.decodingFailed(error)), completion)
             }
         }
         
         task.resume()
         return task
+    }
+}
+
+private extension NetworkService {
+    func completeOnMain<T>(_ result: Result<T, NetworkServiceError>, _ completion: @escaping (Result<T, NetworkServiceError>) -> Void) {
+        DispatchQueue.main.async {
+            completion(result)
+        }
     }
 }
