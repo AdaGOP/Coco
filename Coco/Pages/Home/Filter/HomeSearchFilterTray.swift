@@ -20,13 +20,33 @@ struct HomeSearchFilterTray: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 24.0) {
-                    HomeSearchFilterPriceRangeView(model: viewModel.dataModel.priceRangeModel)
+                    if !viewModel.dataModel.filterPillDataState.isEmpty {
+                        VStack(alignment: .leading, spacing: 12.0) {
+                            Text("Popular Filters")
+                                .foregroundStyle(Token.additionalColorsBlack.toColor())
+                                .font(.jakartaSans(forTextStyle: .body, weight: .semibold))
+                             
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 12.0) {
+                                    ForEach(viewModel.dataModel.filterPillDataState, id: \.id) { state in
+                                        HomeSearchFilterPillView(state: state, didTap: {
+                                            viewModel.updateApplyButtonTitle()
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    HomeSearchFilterPriceRangeView(model: viewModel.dataModel.priceRangeModel, rangeDidChange: {
+                        viewModel.updateApplyButtonTitle()
+                    })
                     Spacer()
                     CocoButton(
                         action: {
                             viewModel.filterDidApply()
                         },
-                        text: "Apply Filter",
+                        text: viewModel.applyButtonTitle,
                         style: .large,
                         type: .primary
                     )
