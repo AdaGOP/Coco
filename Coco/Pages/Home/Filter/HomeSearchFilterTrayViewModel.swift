@@ -9,16 +9,6 @@ import Combine
 import Foundation
 import SwiftUI
 
-struct HomeSearchFilterTrayDataModel {
-    var filterPillDataState: [HomeSearchFilterPillState] = []
-    var priceRangeModel: HomeSearchFilterPriceRangeModel
-    
-    init(filterPillDataState: [HomeSearchFilterPillState], priceRangeModel: HomeSearchFilterPriceRangeModel) {
-        self.filterPillDataState = filterPillDataState
-        self.priceRangeModel = priceRangeModel
-    }
-}
-
 final class HomeSearchFilterTrayViewModel: ObservableObject {
     let filterDidApplyPublisher: PassthroughSubject<HomeSearchFilterTrayDataModel, Never> = PassthroughSubject()
     
