@@ -92,6 +92,10 @@ extension HomeViewController: HomeViewModelAction {
     func openFilterTray(_ viewModel: HomeSearchFilterTrayViewModel) {
         presentTray(view: HomeSearchFilterTray(viewModel: viewModel))
     }
+    
+    func dismissTray() {
+        dismiss(animated: true)
+    }
 }
 
 private extension HomeViewController {

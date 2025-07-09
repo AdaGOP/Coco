@@ -13,52 +13,54 @@ struct HomeSearchFilterPriceRangeView: View {
 
     var body: some View {
         VStack {
-            // Labels
             HStack {
                 Text("Min: $\(Int(model.minPrice))")
                 Spacer()
                 Text("Max: $\(Int(model.maxPrice))")
             }
+            .font(.caption)
             .padding(.horizontal)
 
             GeometryReader { geo in
-                ZStack {
-                    // Background track
+                let width = geo.size.width
+                let lowerRatio = CGFloat((model.minPrice - model.range.lowerBound) / (model.range.upperBound - model.range.lowerBound))
+                let upperRatio = CGFloat((model.maxPrice - model.range.lowerBound) / (model.range.upperBound - model.range.lowerBound))
+
+                ZStack(alignment: .leading) {
                     Capsule()
                         .fill(Color.gray.opacity(0.3))
                         .frame(height: 6)
 
-                    // Selected range
                     Capsule()
                         .fill(Color.blue)
                         .frame(
-                            width: CGFloat((model.maxPrice - model.minPrice) / (model.range.upperBound - model.range.lowerBound)) * geo.size.width,
+                            width: (upperRatio - lowerRatio) * width,
                             height: 6
                         )
-                        .offset(x: CGFloat((model.minPrice - model.range.lowerBound) / (model.range.upperBound - model.range.lowerBound)) * geo.size.width)
+                        .offset(x: lowerRatio * width)
 
-                    // Min knob
+                    // Min thumb
                     Circle()
-                        .frame(width: 28, height: 28)
-                        .foregroundColor(.white)
+                        .fill(Color.white)
                         .overlay(Circle().stroke(Color.blue, lineWidth: 2))
-                        .offset(x: CGFloat((model.minPrice - model.range.lowerBound) / (model.range.upperBound - model.range.lowerBound)) * geo.size.width - 14)
+                        .frame(width: 28, height: 28)
+                        .offset(x: lowerRatio * width - 14)
                         .gesture(DragGesture().onChanged { value in
-                            let percent = max(0, min(1, value.location.x / geo.size.width))
-                            let newValue = model.range.lowerBound + percent * (model.range.upperBound - model.range.lowerBound)
-                            model.minPrice = min(max(model.range.lowerBound, newValue.rounded()), model.maxPrice - model.step)
+                            let percent = min(max(0, value.location.x / width), upperRatio)
+                            let newValue = model.range.lowerBound + Double(percent) * (model.range.upperBound - model.range.lowerBound)
+                            model.minPrice = min(max(model.range.lowerBound, round(newValue / model.step) * model.step), model.maxPrice - model.step)
                         })
 
-                    // Max knob
+                    // Max thumb
                     Circle()
-                        .frame(width: 28, height: 28)
-                        .foregroundColor(.white)
+                        .fill(Color.white)
                         .overlay(Circle().stroke(Color.blue, lineWidth: 2))
-                        .offset(x: CGFloat((model.maxPrice - model.range.lowerBound) / (model.range.upperBound - model.range.lowerBound)) * geo.size.width - 14)
+                        .frame(width: 28, height: 28)
+                        .offset(x: upperRatio * width - 14)
                         .gesture(DragGesture().onChanged { value in
-                            let percent = max(0, min(1, value.location.x / geo.size.width))
-                            let newValue = model.range.lowerBound + percent * (model.range.upperBound - model.range.lowerBound)
-                            model.maxPrice = max(min(model.range.upperBound, newValue.rounded()), model.minPrice + model.step)
+                            let percent = max(min(1, value.location.x / width), lowerRatio)
+                            let newValue = model.range.lowerBound + Double(percent) * (model.range.upperBound - model.range.lowerBound)
+                            model.maxPrice = max(min(model.range.upperBound, round(newValue / model.step) * model.step), model.minPrice + model.step)
                         })
                 }
                 .frame(height: 44)

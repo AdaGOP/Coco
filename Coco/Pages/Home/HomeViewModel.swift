@@ -39,6 +39,8 @@ final class HomeViewModel {
     
     private var responseMap: [Int: Activity] = [:]
     private var cancellables: Set<AnyCancellable> = Set()
+    
+    private var filterDataModel: HomeSearchFilterTrayDataModel?
 }
 
 extension HomeViewModel: HomeViewModelProtocol {
@@ -118,8 +120,9 @@ private extension HomeViewModel {
         )
         viewModel.filterDidApplyPublisher
             .receive(on: RunLoop.main)
-            .sink { data in
-                
+            .sink { [weak self] data in
+                guard let self else { return }
+                actionDelegate?.dismissTray()
             }
             .store(in: &cancellables)
         
