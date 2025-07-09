@@ -29,15 +29,16 @@ struct ActivityDetailDataModel {
     struct Package {
         let imageUrlString: String
         let name: String
-        let location: String
-        let rating: String
+        let description: String
         let price: String
     }
     
     init(_ response: Activity) {
         title = response.title
         location = response.destination.name
-        imageUrlsString = response.images.map { $0.imageUrl }
+        imageUrlsString = response.images
+            .filter { $0.imageType != .banner }
+            .map { $0.imageUrl }
         
         detailInfomation = ActivitySectionLayout(
             title: "Details",
@@ -66,14 +67,13 @@ struct ActivityDetailDataModel {
                 Package(
                     imageUrlString: "https://picsum.photos/id/237/600/341", // TODO: WIRING
                     name: $0.name,
-                    location: "TODO", // TODO: WIRING
-                    rating: "TODO", // TODO: WIRING
+                    description: "Min.\($0.minParticipants) - Max.\($0.maxParticipants)",
                     price: "\($0.pricePerPerson)"
                 )
             }
         )
         
-        hiddenPackages = Array(availablePackages.content.prefix(1))
+        hiddenPackages = Array(availablePackages.content.prefix(2))
     }
 }
 

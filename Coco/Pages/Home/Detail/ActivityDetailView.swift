@@ -461,14 +461,7 @@ private extension ActivityDetailView {
         ratingAreaStackView.addArrangedSubview(
             createIconTextView(
                 image: CocoIcon.icActivityAreaIcon.getImageWithTintColor(Token.grayscale70),
-                text: data.location
-            )
-        )
-        
-        ratingAreaStackView.addArrangedSubview(
-            createIconTextView(
-                image: CocoIcon.icStarRating.image,
-                text: data.rating
+                text: data.description
             )
         )
         

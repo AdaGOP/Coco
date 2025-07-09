@@ -31,7 +31,7 @@ struct Activity: JSONDecodable {
 struct ActivityImage: JSONDecodable {
     let id: Int
     let imageUrl: String
-    let imageType: String
+    let imageType: ImageType
     let activityId: Int
 
     enum CodingKeys: String, CodingKey {
@@ -39,6 +39,12 @@ struct ActivityImage: JSONDecodable {
         case imageUrl = "image_url"
         case imageType = "image_type"
         case activityId = "activity_id"
+    }
+    
+    enum ImageType: String, Decodable {
+        case thumbnail
+        case banner
+        case gallery
     }
 }
 

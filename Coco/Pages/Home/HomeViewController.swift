@@ -89,10 +89,12 @@ extension HomeViewController: HomeViewModelAction {
         })
     }
     
-    func openFilterTray() {
-        presentTray(view: HomeSearchFilterTray(filterDidApply: { [weak self] in
-            self?.dismiss(animated: true)
-        }))
+    func openFilterTray(_ viewModel: HomeSearchFilterTrayViewModel) {
+        presentTray(view: HomeSearchFilterTray(viewModel: viewModel))
+    }
+    
+    func dismissTray() {
+        dismiss(animated: true)
     }
 }
 

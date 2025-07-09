@@ -28,7 +28,12 @@ struct HomeActivityCellDataModel: Hashable {
         self.area = activity.title
         self.name = activity.title
         self.priceText = "\(activity.pricing)"
-        self.imageUrl = URL(string: "https://picsum.photos/200/300") // TODO
+        self.imageUrl = if let thumbnail = activity.images.first { $0.imageType == .thumbnail }?.imageUrl {
+            URL(string: thumbnail)
+        }
+        else {
+            nil
+        }
     }
 }
 

@@ -52,12 +52,16 @@ private extension BaseTabBarViewController {
     func setupTabs() {
         tabBarItemDatas.enumerated().forEach { (index, tabBarItem) in
             let navigationController: UINavigationController = UINavigationController(rootViewController: tabBarItem.makeRootViewController())
-            navigationController.tabBarItem = UITabBarItem(title: tabBarItem.tabTitle, image: tabBarItem.tabIcon, tag: index)
+            navigationController.tabBarItem = UITabBarItem(
+                title: tabBarItem.tabTitle,
+                image: tabBarItem.defaultTabIcon,
+                selectedImage: tabBarItem.selectedTabIcon
+            )
+            navigationController.tabBarItem.tag = index
             navigationControllers.append(navigationController)
         }
         
         viewControllers = navigationControllers
-        
         tabBar.tintColor = Token.mainColorPrimary
         tabBar.backgroundColor = .white
     }

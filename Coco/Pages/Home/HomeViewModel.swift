@@ -5,6 +5,7 @@
 //  Created by Jackie Leonardy on 06/07/25.
 //
 
+import Combine
 import Foundation
 
 final class HomeViewModel {
@@ -13,6 +14,10 @@ final class HomeViewModel {
     
     init(activityFetcher: ActivityFetcherProtocol = ActivityFetcher()) {
         self.activityFetcher = activityFetcher
+    }
+    
+    deinit {
+        cancellables.removeAll()
     }
     
     private let activityFetcher: ActivityFetcherProtocol
@@ -24,14 +29,19 @@ final class HomeViewModel {
     private lazy var loadingState: HomeLoadingState = HomeLoadingState()
     private lazy var searchBarViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
         currentTypedText: "",
-        trailingIcon: (image: CocoIcon.icFilterIcon.image, didTap: { [weak self] in
-            self?.actionDelegate?.openFilterTray()
-        }),
+        trailingIcon: (
+            image: CocoIcon.icFilterIcon.image,
+            didTap: openFilterTray
+        ),
         isTypeAble: false,
         delegate: self
     )
     
     private var responseMap: [Int: Activity] = [:]
+    private var responseData: [Activity] = []
+    private var cancellables: Set<AnyCancellable> = Set()
+    
+    private var filterDataModel: HomeSearchFilterTrayDataModel?
 }
 
 extension HomeViewModel: HomeViewModelProtocol {
@@ -91,10 +101,98 @@ private extension HomeViewModel {
                     sectionData.append(HomeActivityCellDataModel(activity: $0))
                     self.responseMap[$0.id] = $0
                 }
+                responseData = response.values
                 collectionViewModel.updateActivity(activity: (title: "", dataModel: sectionData))
+                
+                contructFilterData()
             case .failure(let failure):
                 break
             }
         }
+    }
+    
+    func contructFilterData() {
+        let responseMapActivity: [Activity] = Array(responseMap.values)
+        var seenIDs: Set<Int> = Set()
+        var activityValues: [HomeSearchFilterPillState] = responseMap.values
+            .flatMap { $0.accessories }
+            .filter { accessory in
+                if seenIDs.contains(accessory.id) {
+                    return false
+                } else {
+                    seenIDs.insert(accessory.id)
+                    return true
+                }
+            }
+            .map {
+                HomeSearchFilterPillState(
+                    id: $0.id,
+                    title: $0.name,
+                    isSelected: false
+                )
+            }
+        
+        if responseMapActivity.first(where: { $0.cancelable }) != nil {
+            activityValues.append(
+                HomeSearchFilterPillState(
+                    id: -99999999,
+                    title: "Free Cancellation",
+                    isSelected: false
+                )
+            )
+        }
+        
+        let sortedData = responseMapActivity.sorted { $0.pricing < $1.pricing }
+        
+        let minPrice: Double = sortedData.first?.pricing ?? 0
+        let maxPrice: Double = sortedData.last?.pricing ?? 0
+        let filterDataModel: HomeSearchFilterTrayDataModel = HomeSearchFilterTrayDataModel(
+            filterPillDataState: activityValues,
+            priceRangeModel: HomeSearchFilterPriceRangeModel(
+                minPrice: minPrice,
+                maxPrice: maxPrice,
+                range: minPrice...maxPrice,
+                step: 1
+            )
+        )
+        
+        self.filterDataModel = filterDataModel
+    }
+    
+    func openFilterTray() {
+        guard let filterDataModel: HomeSearchFilterTrayDataModel else { return }
+        
+        let viewModel: HomeSearchFilterTrayViewModel = HomeSearchFilterTrayViewModel(
+            dataModel: filterDataModel,
+            activities: Array(responseMap.values)
+        )
+        viewModel.filterDidApplyPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] newFilterData in
+                guard let self else { return }
+                self.filterDataModel = newFilterData
+                actionDelegate?.dismissTray()
+                filterDidApply()
+            }
+            .store(in: &cancellables)
+        
+        actionDelegate?.openFilterTray(viewModel)
+    }
+    
+    func filterDidApply() {
+        guard let filterDataModel: HomeSearchFilterTrayDataModel else { return }
+        let tempResponseData: [Activity] = HomeFilterUtil.doFilter(
+            responseData,
+            filterDataModel: filterDataModel
+        )
+        
+        collectionViewModel.updateActivity(
+            activity: (
+                title: "",
+                dataModel: tempResponseData.map {
+                    HomeActivityCellDataModel(activity: $0)
+                }
+            )
+        )
     }
 }
