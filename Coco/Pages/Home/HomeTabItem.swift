@@ -11,7 +11,8 @@ import UIKit
 
 struct HomeTabItem: TabItemRepresentable {
     var tabTitle: String { "Home" }
-    var tabIcon: UIImage? { CocoIcon.icTabIconHome.image }
+    var defaultTabIcon: UIImage? { CocoIcon.icTabIconHome.image }
+    var selectedTabIcon: UIImage? { CocoIcon.icTabIconHomeFill.image }
 
     func makeRootViewController() -> UIViewController {
         let viewModel: HomeViewModel = HomeViewModel()

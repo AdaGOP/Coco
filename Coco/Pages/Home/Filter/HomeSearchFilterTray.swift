@@ -9,14 +9,7 @@ import Foundation
 import SwiftUI
 
 struct HomeSearchFilterTray: View {
-    @StateObject var viewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
-        currentTypedText: "",
-        trailingIcon: nil,
-        isTypeAble: true,
-        delegate: nil
-    )
-    
-    var filterDidApply: () -> Void
+    @ObservedObject var viewModel: HomeSearchFilterTrayViewModel
     
     var body: some View {
         VStack(alignment: .center) {
@@ -27,10 +20,11 @@ struct HomeSearchFilterTray: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 24.0) {
+                    HomeSearchFilterPriceRangeView(model: viewModel.dataModel.priceRangeModel)
                     Spacer()
                     CocoButton(
                         action: {
-                            filterDidApply()
+                            viewModel.filterDidApply()
                         },
                         text: "Apply Filter",
                         style: .large,

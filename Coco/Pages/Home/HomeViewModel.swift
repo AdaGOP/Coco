@@ -5,6 +5,7 @@
 //  Created by Jackie Leonardy on 06/07/25.
 //
 
+import Combine
 import Foundation
 
 final class HomeViewModel {
@@ -13,6 +14,10 @@ final class HomeViewModel {
     
     init(activityFetcher: ActivityFetcherProtocol = ActivityFetcher()) {
         self.activityFetcher = activityFetcher
+    }
+    
+    deinit {
+        cancellables.removeAll()
     }
     
     private let activityFetcher: ActivityFetcherProtocol
@@ -24,14 +29,16 @@ final class HomeViewModel {
     private lazy var loadingState: HomeLoadingState = HomeLoadingState()
     private lazy var searchBarViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
         currentTypedText: "",
-        trailingIcon: (image: CocoIcon.icFilterIcon.image, didTap: { [weak self] in
-            self?.actionDelegate?.openFilterTray()
-        }),
+        trailingIcon: (
+            image: CocoIcon.icFilterIcon.image,
+            didTap: openFilterTray
+        ),
         isTypeAble: false,
         delegate: self
     )
     
     private var responseMap: [Int: Activity] = [:]
+    private var cancellables: Set<AnyCancellable> = Set()
 }
 
 extension HomeViewModel: HomeViewModelProtocol {
@@ -96,5 +103,26 @@ private extension HomeViewModel {
                 break
             }
         }
+    }
+    
+    func openFilterTray() {
+        let viewModel: HomeSearchFilterTrayViewModel = HomeSearchFilterTrayViewModel(
+            dataModel: HomeSearchFilterTrayDataModel(
+                filterPillDataState: [],
+                priceRangeModel: HomeSearchFilterPriceRangeModel(
+                    minPrice: 100,
+                            maxPrice: 1000,
+                            range: 0...2000
+                )
+            )
+        )
+        viewModel.filterDidApplyPublisher
+            .receive(on: RunLoop.main)
+            .sink { data in
+                
+            }
+            .store(in: &cancellables)
+        
+        actionDelegate?.openFilterTray(viewModel)
     }
 }
