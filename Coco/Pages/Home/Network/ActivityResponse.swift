@@ -14,7 +14,7 @@ struct Activity: JSONDecodable {
     let pricing: Double
     let category: ActivityCategory
     let packages: [ActivityPackage]
-    let cancelable: Bool
+    let cancelable: String
     let createdAt: String
     let accessories: [Accessory]
     let description: String
@@ -57,7 +57,6 @@ struct ActivityCategory: JSONDecodable {
 struct ActivityPackage: JSONDecodable {
     let id: Int
     let name: String
-    let hostId: Int
     let endTime: String
     let startTime: String
     let activityId: Int
@@ -68,7 +67,6 @@ struct ActivityPackage: JSONDecodable {
 
     enum CodingKeys: String, CodingKey {
         case id, name, description
-        case hostId = "host_id"
         case endTime = "end_time"
         case startTime = "start_time"
         case activityId = "activity_id"

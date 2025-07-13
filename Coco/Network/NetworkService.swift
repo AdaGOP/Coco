@@ -17,6 +17,14 @@ protocol NetworkServiceProtocol: AnyObject {
         body: JSONEncodable?,
         completion: @escaping (Result<T, NetworkServiceError>) -> Void
     ) -> URLSessionDataTask?
+    
+    func request<T: JSONDecodable>(
+        urlString: String,
+        method: HTTPMethod,
+        parameters: JSONObject,
+        headers: [String: String],
+        body: JSONEncodable?
+    ) async throws -> T
 }
 
 final class NetworkService: NetworkServiceProtocol {
@@ -92,15 +100,26 @@ final class NetworkService: NetworkServiceProtocol {
             do {
                 let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
 
-                if let arrayType: any JSONArrayProtocol.Type = T.self as? JSONArrayProtocol.Type,
-                   let jsonArray: [JSONObject] = jsonObject as? [JSONObject] {
-                    if let typedArray: T = try? arrayType.init(jsonArray: jsonArray) as? T {
-                        completeOnMain(.success(typedArray), completion)
-                        return
-                    } else {
-                        completeOnMain(.failure(.decodingFailed(NSError(domain: "Failed to cast JSONArray", code: -1))), completion)
-                        return
+                if let arrayType = T.self as? JSONArrayProtocol.Type,
+                   let jsonArray = jsonObject as? [JSONObject] {
+                    do {
+                        let typedArray = try arrayType.init(jsonArray: jsonArray)
+                        guard let casted = typedArray as? T else {
+                            let castError = NSError(
+                                domain: "TypeCasting",
+                                code: -1,
+                                userInfo: [
+                                    NSLocalizedDescriptionKey: "Failed to cast \(type(of: typedArray)) to \(T.self)"
+                                ]
+                            )
+                            completeOnMain(.failure(.decodingFailed(castError)), completion)
+                            return
+                        }
+                        completeOnMain(.success(casted), completion)
+                    } catch {
+                        completeOnMain(.failure(.decodingFailed(error)), completion)
                     }
+                    return
                 }
 
                 if let jsonDict: JSONObject = jsonObject as? JSONObject {
@@ -116,6 +135,31 @@ final class NetworkService: NetworkServiceProtocol {
         
         task.resume()
         return task
+    }
+    
+    func request<T: JSONDecodable>(
+        urlString: String,
+        method: HTTPMethod,
+        parameters: JSONObject,
+        headers: [String: String],
+        body: JSONEncodable?
+    ) async throws -> T {
+        try await withCheckedThrowingContinuation { continuation in
+            request(
+                urlString: urlString,
+                method: method,
+                parameters: parameters,
+                headers: headers,
+                body: body
+            ) { (result: Result<T, NetworkServiceError>) in
+                switch result {
+                case .success(let value):
+                    continuation.resume(returning: value)
+                case .failure(let failure):
+                    continuation.resume(throwing: failure)
+                }
+            }
+        }
     }
 }
 

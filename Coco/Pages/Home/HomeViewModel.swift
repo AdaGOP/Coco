@@ -70,7 +70,7 @@ extension HomeViewModel: HomeCollectionViewModelDelegate {
 }
 
 extension HomeViewModel: HomeSearchBarViewModelDelegate {
-    func notifyHomeSearchBarDidTap(isTypeAble: Bool) {
+    func notifyHomeSearchBarDidTap(isTypeAble: Bool, viewModel: HomeSearchBarViewModel) {
         guard !isTypeAble else { return }
         
         // TODO: Change with real data
@@ -132,7 +132,7 @@ private extension HomeViewModel {
                 )
             }
         
-        if responseMapActivity.first(where: { $0.cancelable }) != nil {
+        if responseMapActivity.first(where: { !$0.cancelable.isEmpty }) != nil {
             activityValues.append(
                 HomeSearchFilterPillState(
                     id: -99999999,

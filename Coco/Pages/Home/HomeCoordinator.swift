@@ -46,8 +46,38 @@ extension HomeCoordinator: HomeViewModelNavigationDelegate {
     }
 }
 
+extension HomeCoordinator: HomeFormScheduleViewModelDelegate {
+    func notifyFormScheduleDidNavigateToCheckout(with response: CreateBookingResponse) {
+        let viewModel: CheckoutViewModel = CheckoutViewModel(
+            bookingResponse: response.bookingDetails
+        )
+        viewModel.delegate = self
+        let viewController = CheckoutViewController(viewModel: viewModel)
+        start(viewController: viewController)
+    }
+}
+
+extension HomeCoordinator: CheckoutViewModelDelegate {
+    func notifyUserDidCheckout() {
+        guard let tabBarController: BaseTabBarViewController = parentCoordinator?.navigationController?.tabBarController as? BaseTabBarViewController
+        else {
+            return
+        }
+        tabBarController.selectedIndex = 1
+        navigationController?.popToRootViewController(animated: true)
+    }
+}
+
 extension HomeCoordinator: ActivityDetailNavigationDelegate {
-    func notifyActivityDetailPackageDidSelect(package: ActivityDetailDataModel.Package) {
-        
+    func notifyActivityDetailPackageDidSelect(package: ActivityDetailDataModel, selectedPackageId: Int) {
+        let viewModel: HomeFormScheduleViewModel = HomeFormScheduleViewModel(
+            input: HomeFormScheduleViewModelInput(
+                package: package,
+                selectedPackageId: selectedPackageId
+            )
+        )
+        viewModel.delegate = self
+        let viewController: HomeFormScheduleViewController = HomeFormScheduleViewController(viewModel: viewModel)
+        start(viewController: viewController)
     }
 }

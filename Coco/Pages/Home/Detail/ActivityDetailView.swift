@@ -10,6 +10,7 @@ import UIKit
 
 protocol ActivityDetailViewDelegate: AnyObject {
     func notifyPackagesButtonDidTap(shouldShowAll: Bool)
+    func notifyPackagesDetailDidTap(with packageId: Int)
 }
 
 final class ActivityDetailView: UIView {
@@ -65,13 +66,17 @@ final class ActivityDetailView: UIView {
         }
         
         // TnC
-        if !data.tnc.content.isEmpty {
-            contentStackView.addArrangedSubview(
-                createSectionView(
-                    title: data.tnc.title,
-                    view: createBenefitListView(titles: data.tnc.content)
-                )
+        if !data.tnc.isEmpty {
+            let tncLabel: UILabel = UILabel(
+                font: .jakartaSans(forTextStyle: .footnote, weight: .regular),
+                textColor: Token.additionalColorsBlack,
+                numberOfLines: 0
             )
+            tncLabel.text = data.tnc
+            contentStackView.addArrangedSubview(createSectionView(
+                title: "Terms and Conditon",
+                view: tncLabel
+            ))
         }
         
         if !data.availablePackages.content.isEmpty {
@@ -437,7 +442,7 @@ private extension ActivityDetailView {
         let headerStackView: UIStackView = createStackView(spacing: 12.0)
         headerStackView.alignment = .leading
         
-        let footerStackView: UIStackView = createStackView(spacing: 12.0)
+        let footerContentView: UIView = UIView()
         
         let imageView: UIImageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -470,18 +475,76 @@ private extension ActivityDetailView {
             textColor: Token.additionalColorsBlack,
             numberOfLines: 2
         )
-        priceLabel.text = data.price
+        
+        let attributedString: NSMutableAttributedString = NSMutableAttributedString(
+            string: data.price,
+            attributes: [
+                .font : UIFont.jakartaSans(forTextStyle: .subheadline, weight: .bold),
+                .foregroundColor : Token.additionalColorsBlack
+            ]
+        )
+        
+        attributedString.append(
+            NSAttributedString(
+                string: "/Person",
+                attributes: [
+                    .font : UIFont.jakartaSans(forTextStyle: .subheadline, weight: .medium),
+                    .foregroundColor : Token.grayscale60
+                ]
+            )
+        )
+        
+        priceLabel.setContentHuggingPriority(.defaultLow - 1, for: .horizontal)
+        priceLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        
+        priceLabel.attributedText = attributedString
         
         containerStackView.addArrangedSubview(imageView)
         containerStackView.addArrangedSubview(contentStackView)
         
         contentStackView.addArrangedSubview(headerStackView)
-        contentStackView.addArrangedSubview(footerStackView)
+        contentStackView.addArrangedSubview(footerContentView)
         
         headerStackView.addArrangedSubview(nameLabel)
         headerStackView.addArrangedSubview(ratingAreaStackView)
         
-        footerStackView.addArrangedSubview(priceLabel)
+        let action: UIAction = UIAction { [weak self] _ in
+            self?.delegate?.notifyPackagesDetailDidTap(with: data.id)
+        }
+         
+        var config = UIButton.Configuration.filled()
+        config.image = CocoIcon.icArrowTopRight.image
+        config.baseBackgroundColor = Token.mainColorPrimary
+        config.baseForegroundColor = .white
+        config.cornerStyle = .capsule
+
+        let button: UIButton = UIButton(configuration: config, primaryAction: action)
+        button.layout {
+            $0.size(40.0)
+        }
+        
+        button.setContentHuggingPriority(.required + 1, for: .horizontal)
+        button.setContentHuggingPriority(.required + 1, for: .vertical)
+
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .vertical)
+        
+        footerContentView.addSubviews([
+            priceLabel,
+            button
+        ])
+        
+        priceLabel.layout {
+            $0.leading(to: footerContentView.leadingAnchor)
+                .top(to: footerContentView.topAnchor)
+                .bottom(to: footerContentView.bottomAnchor)
+        }
+        
+        button.layout {
+            $0.leading(to: priceLabel.trailingAnchor, relation: .lessThanOrEqual)
+                .centerY(to: footerContentView.centerYAnchor)
+                .trailing(to: footerContentView.trailingAnchor)
+        }
         
         containerStackView.isLayoutMarginsRelativeArrangement = true
         containerStackView.layoutMargins = .init(edges: 12.0)

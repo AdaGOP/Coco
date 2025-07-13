@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ActivityDetailNavigationDelegate: AnyObject {
-    func notifyActivityDetailPackageDidSelect(package: ActivityDetailDataModel.Package)
+    func notifyActivityDetailPackageDidSelect(package: ActivityDetailDataModel, selectedPackageId: Int)
 }
 
 protocol ActivityDetailViewModelAction: AnyObject {
@@ -21,6 +21,6 @@ protocol ActivityDetailViewModelProtocol: AnyObject {
     var navigationDelegate: ActivityDetailNavigationDelegate? { get set }
     
     func onViewDidLoad()
-    func onPackageDidTap(data: ActivityDetailDataModel.Package)
     func onPackageDetailStateDidChange(shouldShowAll: Bool)
+    func onPackagesDetailDidTap(with packageId: Int)
 }
