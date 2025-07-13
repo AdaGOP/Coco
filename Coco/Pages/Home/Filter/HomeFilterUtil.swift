@@ -21,7 +21,7 @@ final class HomeFilterUtil {
                 let shouldMatchCancelable = selectedIds.contains(-99999999)
                 let shouldMatchAccessory = selectedIds.contains(where: { $0 != -99999999 })
 
-                let matchesCancelable = shouldMatchCancelable && activity.cancelable
+                let matchesCancelable = shouldMatchCancelable && !activity.cancelable.isEmpty
                 let matchesAccessory = shouldMatchAccessory &&
                     activity.accessories.contains { selectedIds.contains($0.id) }
 

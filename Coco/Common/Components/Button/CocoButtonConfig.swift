@@ -25,9 +25,9 @@ enum CocoButtonStyle {
         case .normal:
             return .init(
                 top: 0,
-                leading: 45.0,
+                leading: 30.0,
                 bottom: 0,
-                trailing: 45.0
+                trailing: 30.0
             )
         case .large:
             return .init(

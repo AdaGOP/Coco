@@ -23,11 +23,11 @@ extension ActivityDetailViewModel: ActivityDetailViewModelProtocol {
         actionDelegate?.configureView(data: data)
     }
     
-    func onPackageDidTap(data: ActivityDetailDataModel.Package) {
-        navigationDelegate?.notifyActivityDetailPackageDidSelect(package: data)
-    }
-    
     func onPackageDetailStateDidChange(shouldShowAll: Bool) {
         actionDelegate?.updatePackageData(data: shouldShowAll ? data.availablePackages.content : data.hiddenPackages)
+    }
+    
+    func onPackagesDetailDidTap(with packageId: Int) {
+        navigationDelegate?.notifyActivityDetailPackageDidSelect(package: data, selectedPackageId: packageId)
     }
 }

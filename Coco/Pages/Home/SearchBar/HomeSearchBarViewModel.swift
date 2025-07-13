@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 protocol HomeSearchBarViewModelDelegate: AnyObject {
-    func notifyHomeSearchBarDidTap(isTypeAble: Bool)
+    func notifyHomeSearchBarDidTap(isTypeAble: Bool, viewModel: HomeSearchBarViewModel)
 }
 
 final class HomeSearchBarViewModel: ObservableObject {
@@ -29,6 +29,6 @@ final class HomeSearchBarViewModel: ObservableObject {
     
     func onTextFieldFocusDidChange(to newFocus: Bool) {
         guard newFocus else { return }
-        delegate?.notifyHomeSearchBarDidTap(isTypeAble: isTypeAble)
+        delegate?.notifyHomeSearchBarDidTap(isTypeAble: isTypeAble, viewModel: self)
     }
 }

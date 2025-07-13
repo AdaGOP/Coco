@@ -15,7 +15,7 @@ struct ActivityDetailDataModel {
     let detailInfomation: ActivitySectionLayout<String>
     let providerDetail: ActivitySectionLayout<ProviderDetail>
     let tripFacilities: ActivitySectionLayout<[String]>
-    let tnc: ActivitySectionLayout<[String]>
+    let tnc: String
     
     let availablePackages: ActivitySectionLayout<[Package]>
     let hiddenPackages: [Package]
@@ -31,6 +31,8 @@ struct ActivityDetailDataModel {
         let name: String
         let description: String
         let price: String
+        
+        let id: Int
     }
     
     init(_ response: Activity) {
@@ -56,10 +58,7 @@ struct ActivityDetailDataModel {
             title: "This Trip Includes",
             content: response.accessories.map { $0.name }
         )
-        tnc = ActivitySectionLayout(
-            title: "Terms and Condition",
-            content: [] // TODO: Wiring
-        )
+        tnc = response.cancelable
         
         availablePackages = ActivitySectionLayout(
             title: "Available Packages",
@@ -68,7 +67,8 @@ struct ActivityDetailDataModel {
                     imageUrlString: "https://picsum.photos/id/237/600/341", // TODO: WIRING
                     name: $0.name,
                     description: "Min.\($0.minParticipants) - Max.\($0.maxParticipants)",
-                    price: "\($0.pricePerPerson)"
+                    price: "Rp\($0.pricePerPerson)",
+                    id: $0.id
                 )
             }
         )

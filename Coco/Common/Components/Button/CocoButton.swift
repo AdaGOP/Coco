@@ -58,3 +58,22 @@ struct CocoButtonStyleConfiguration: ButtonStyle {
             .cornerRadius(style.cornerRadius)
     }
 }
+
+final class CocoButtonHostingController: UIHostingController<AnyView> {
+    init(
+        action: @escaping () -> Void,
+        text: String,
+        style: CocoButtonStyle,
+        type: CocoButtonType,
+        isStretch: Bool = true
+    ) {
+        let view = CocoButton(action: action, text: text, style: style, type: type)
+                   .environment(\.isStretch, isStretch) // Inject environment here
+
+        super.init(rootView: AnyView(view))
+    }
+
+    @MainActor @objc required dynamic init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
