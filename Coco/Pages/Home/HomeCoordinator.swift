@@ -70,37 +70,14 @@ extension HomeCoordinator: CheckoutViewModelDelegate {
 
 extension HomeCoordinator: ActivityDetailNavigationDelegate {
     func notifyActivityDetailPackageDidSelect(package: ActivityDetailDataModel, selectedPackageId: Int) {
-//        let viewModel: HomeFormScheduleViewModel = HomeFormScheduleViewModel(
-//            input: HomeFormScheduleViewModelInput(
-//                package: package,
-//                selectedPackageId: selectedPackageId
-//            )
-//        )
-//        viewModel.delegate = self
-//        let viewController: HomeFormScheduleViewController = HomeFormScheduleViewController(viewModel: viewModel)
-//        start(viewController: viewController)
-        
-        let viewModel = CheckoutViewModel(
-            bookingResponse: BookingDetails(
-                status: "",
-                bookingId: 1,
-                startTime: "1232",
-                destination: BookingDestination(
-                    id: 1,
-                    name: "Raja Ampat, West Papua",
-                    imageUrl: nil,
-                    description: "An archipelago of over 1,500 islands, famous for its world-class coral reef biodiversity and pristine marine life"
-                ),
-                totalPrice: 130000.0,
-                packageName: "Group Package",
-                participants: 2,
-                activityDate: "2025-07-09",
-                activityTitle: "Snorkeling in Piaynemo",
-                bookingCreatedAt: "1231231"
+        let viewModel: HomeFormScheduleViewModel = HomeFormScheduleViewModel(
+            input: HomeFormScheduleViewModelInput(
+                package: package,
+                selectedPackageId: selectedPackageId
             )
         )
         viewModel.delegate = self
-        let viewController = CheckoutViewController(viewModel: viewModel)
+        let viewController: HomeFormScheduleViewController = HomeFormScheduleViewController(viewModel: viewModel)
         start(viewController: viewController)
     }
 }
