@@ -20,9 +20,9 @@ final class CreateBookingFetcher: CreateBookingFetcherProtocol {
         try await networkService.request(
             urlString: CreateBookingEndpoint.create.urlString,
             method: .post,
-            parameters: request.toDictionary() ?? [:],
+            parameters: [:],
             headers: [:],
-            body: nil
+            body: request
         )
     }
     
