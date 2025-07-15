@@ -14,8 +14,8 @@ struct MyTripTabItem: TabItemRepresentable {
     var selectedTabIcon: UIImage? { CocoIcon.icTabIconTripFill.image }
 
     func makeRootViewController() -> UIViewController {
-        let vc = MyTripViewController()
-        vc.view.backgroundColor = .brown
+        let viewModel: MyTripViewModel = MyTripViewModel()
+        let vc = MyTripViewController(viewModel: viewModel)
         vc.title = "MyTrip"
         return vc
     }

@@ -1,0 +1,23 @@
+//
+//  MyTripViewModelContract.swift
+//  Coco
+//
+//  Created by Jackie Leonardy on 14/07/25.
+//
+
+import Foundation
+
+protocol MyTripViewModelDelegate: AnyObject {
+    func notifyTripListDidTap(with data: CreateBookingResponse)
+}
+
+protocol MyTripViewModelAction: AnyObject {
+    func configureView(datas: [MyTripListCardDataModel])
+}
+protocol MyTripViewModelProtocol: AnyObject {
+    var delegate: MyTripViewModelDelegate? { get set }
+    var actionDelegate: MyTripViewModelAction? { get set }
+    
+    func onViewDidLoad()
+    func onTripListDidTap(at index: Int)
+}
