@@ -17,10 +17,24 @@ final class HomeSearchBarViewModel: ObservableObject {
     
     @Published var currentTypedText: String = ""
     
+    let isSecure: Bool
+    let leadingIcon: UIImage?
     let trailingIcon: ImageHandler?
     let isTypeAble: Bool
+    let placeholderText: String
     
-    init(currentTypedText: String, trailingIcon: ImageHandler?, isTypeAble: Bool, delegate: HomeSearchBarViewModelDelegate?) {
+    init(
+        isSecure: Bool = false,
+        leadingIcon: UIImage?,
+        placeholderText: String,
+        currentTypedText: String,
+        trailingIcon: ImageHandler?,
+        isTypeAble: Bool,
+        delegate: HomeSearchBarViewModelDelegate?
+    ) {
+        self.isSecure = isSecure
+        self.leadingIcon = leadingIcon
+        self.placeholderText = placeholderText
         self.currentTypedText = currentTypedText
         self.trailingIcon = trailingIcon
         self.isTypeAble = isTypeAble

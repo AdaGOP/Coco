@@ -13,10 +13,11 @@ struct HomeSearchBarView: View {
     
     var body: some View {
         CocoInputTextField(
-            leadingIcon: CocoIcon.icSearchLoop.image,
+            isSecure: viewModel.isSecure,
+            leadingIcon: viewModel.leadingIcon,
             currentTypedText: $viewModel.currentTypedText,
             trailingIcon: viewModel.trailingIcon,
-            placeholder: "Search...",
+            placeholder: viewModel.placeholderText,
             shouldInterceptFocus: !viewModel.isTypeAble,
             onFocusedAction: viewModel.onTextFieldFocusDidChange(to:)
         )

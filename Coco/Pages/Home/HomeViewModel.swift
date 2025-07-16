@@ -28,6 +28,8 @@ final class HomeViewModel {
     }()
     private lazy var loadingState: HomeLoadingState = HomeLoadingState()
     private lazy var searchBarViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
+        leadingIcon: CocoIcon.icSearchLoop.image,
+        placeholderText: "Search...",
         currentTypedText: "",
         trailingIcon: (
             image: CocoIcon.icFilterIcon.image,

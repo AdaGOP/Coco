@@ -12,6 +12,7 @@ typealias ImageHandler = (image: UIImage, didTap: (() -> Void)?)
 
 struct CocoInputTextFieldStyle: TextFieldStyle {
     @Binding private var isFocused: Bool
+    @Binding private var isSecure: Bool
     
     let leadingIcon: UIImage?
     let placeHolder: String?
@@ -22,6 +23,7 @@ struct CocoInputTextFieldStyle: TextFieldStyle {
     init(
         leadingIcon: UIImage?,
         isFocused: Binding<Bool>,
+        isSecure: Binding<Bool>,
         placeHolder: String?,
         trailingIcon: ImageHandler?,
         shouldInterceptFocus: Bool,
@@ -29,6 +31,7 @@ struct CocoInputTextFieldStyle: TextFieldStyle {
     ) {
         self.leadingIcon = leadingIcon
         _isFocused = isFocused
+        _isSecure = isSecure
         self.placeHolder = placeHolder
         self.trailingIcon = trailingIcon
         self.shouldInterceptFocus = shouldInterceptFocus
@@ -76,6 +79,19 @@ struct CocoInputTextFieldStyle: TextFieldStyle {
                         trailingIcon.didTap?()
                     }
             }
+            
+//            if isSecure {
+//                Button(action: {
+//                    isSecure.toggle()
+//                }) {
+//                    Image(systemName: isSecure ? "eye.slash" : "eye")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 18.0, height: 18.0)
+//                        .foregroundStyle(.gray)
+//                }
+//                .buttonStyle(.plain)
+//            }
         }
         .padding(.vertical, 14.0)
         .padding(.horizontal, 16.0)

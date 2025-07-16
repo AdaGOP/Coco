@@ -23,6 +23,8 @@ final class HomeFormScheduleViewModel {
     
     private let input: HomeFormScheduleViewModelInput
     private lazy var calendarInputViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
+        leadingIcon: nil,
+        placeholderText: "Input Date Visit...",
         currentTypedText: "",
         trailingIcon: (
             image: CocoIcon.icFilterIcon.image,
@@ -32,6 +34,8 @@ final class HomeFormScheduleViewModel {
         delegate: self
     )
     private lazy var paxInputViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
+        leadingIcon: nil,
+        placeholderText: "Input total Pax...",
         currentTypedText: "",
         trailingIcon: nil,
         isTypeAble: true,

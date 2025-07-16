@@ -14,8 +14,9 @@ struct ProfileTabItem: TabItemRepresentable {
     var selectedTabIcon: UIImage? { CocoIcon.icTabIconProfileFill.image }
 
     func makeRootViewController() -> UIViewController {
-        let vc = ProfileViewController()
-        vc.view.backgroundColor = .orange
+        let vm = SignInViewModel()
+        let vc = SignInViewController(viewModel: vm)
+//        vc.view.backgroundColor = .orange
         vc.title = "Profile"
         return vc
     }
