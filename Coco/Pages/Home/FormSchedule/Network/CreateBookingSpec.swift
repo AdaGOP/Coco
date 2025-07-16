@@ -22,7 +22,7 @@ struct CreateBookingSpec: JSONEncodable {
     
     init(packageId: Int, bookingDate: Date, participants: Int, userId: String) {
         let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = "YYYY-dd-mm"
+        formatter.dateFormat = "YYYY-MM-dd"
         
         self.packageId = packageId
         self.bookingDate = formatter.string(from: bookingDate)

@@ -53,7 +53,10 @@ extension HomeCoordinator: HomeFormScheduleViewModelDelegate {
         )
         viewModel.delegate = self
         let viewController = CheckoutViewController(viewModel: viewModel)
-        start(viewController: viewController)
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.start(viewController: viewController)
+        }
     }
 }
 
