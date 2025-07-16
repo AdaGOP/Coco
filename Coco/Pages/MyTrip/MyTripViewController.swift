@@ -24,8 +24,12 @@ final class MyTripViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.onViewDidLoad()
         thisView.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.onViewWillAppear()
     }
     
     override func loadView() {

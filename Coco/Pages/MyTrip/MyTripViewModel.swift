@@ -16,20 +16,20 @@ final class MyTripViewModel {
     }
     
     private let fetcher: MyTripBookingListFetcherProtocol
-    private var responses: [CreateBookingResponse] = []
+    private var responses: [BookingDetails] = []
 }
 
 extension MyTripViewModel: MyTripViewModelProtocol {
-    func onViewDidLoad() {
-        Task {
-            let response: [CreateBookingResponse] = try await fetcher.fetchTripBookingList(
+    func onViewWillAppear() {
+        Task { @MainActor in
+            let response: [BookingDetails] = try await fetcher.fetchTripBookingList(
                 request: TripBookingListSpec(userId: UserDefaults.standard.value(forKey: "user-id") as? String ?? "")
             ).values
             
             responses = response
             
             actionDelegate?.configureView(datas: response.map({ listData in
-                MyTripListCardDataModel(bookingDetail: listData.bookingDetails)
+                MyTripListCardDataModel(bookingDetail: listData)
             }))
         }
     }

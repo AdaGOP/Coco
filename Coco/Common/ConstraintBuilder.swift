@@ -32,6 +32,19 @@ final class ConstraintBuilder {
         applyConstraint(from: view.topAnchor, to: anchor, relation: relation, constant: constant)
         return self
     }
+    
+    @discardableResult
+    func edges(
+        to view: UIView,
+        constant: CGFloat = 0
+    ) -> Self {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        applyConstraint(from: view.topAnchor, to: view.topAnchor, relation: .equal, constant: constant)
+        applyConstraint(from: view.leadingAnchor, to: view.leadingAnchor, relation: .equal, constant: constant)
+        applyConstraint(from: view.trailingAnchor, to: view.trailingAnchor, relation: .equal, constant: -constant)
+        applyConstraint(from: view.bottomAnchor, to: view.bottomAnchor, relation: .equal, constant: -constant)
+        return self
+    }
 
     @discardableResult
     func bottom(

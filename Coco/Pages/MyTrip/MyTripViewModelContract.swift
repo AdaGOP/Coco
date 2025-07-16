@@ -8,7 +8,7 @@
 import Foundation
 
 protocol MyTripViewModelDelegate: AnyObject {
-    func notifyTripListDidTap(with data: CreateBookingResponse)
+    func notifyTripListDidTap(with data: BookingDetails)
 }
 
 protocol MyTripViewModelAction: AnyObject {
@@ -18,6 +18,6 @@ protocol MyTripViewModelProtocol: AnyObject {
     var delegate: MyTripViewModelDelegate? { get set }
     var actionDelegate: MyTripViewModelAction? { get set }
     
-    func onViewDidLoad()
+    func onViewWillAppear()
     func onTripListDidTap(at index: Int)
 }

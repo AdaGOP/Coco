@@ -12,6 +12,7 @@ private let kInputHeight: CGFloat = 52.0
 
 struct CocoInputTextField: View {
     @Binding var currentTypedText: String
+    @State private var isSecure: Bool
     
     private let shouldInterceptFocus: Bool
     private let leadingIcon: UIImage?
@@ -23,6 +24,7 @@ struct CocoInputTextField: View {
     private let onFocusedAction: ((Bool) -> Void)?
     
     init(
+        isSecure: Bool,
         leadingIcon: UIImage? = nil,
         currentTypedText: Binding<String>,
         trailingIcon: ImageHandler? = nil,
@@ -30,6 +32,7 @@ struct CocoInputTextField: View {
         shouldInterceptFocus: Bool = false,
         onFocusedAction: ((Bool) -> Void)? = nil
     ) {
+        self.isSecure = isSecure
         self.leadingIcon = leadingIcon
         _currentTypedText = currentTypedText
         self.trailingIcon = trailingIcon
@@ -39,23 +42,26 @@ struct CocoInputTextField: View {
     }
     
     var body: some View {
-        TextField(placeholder ?? "", text: $currentTypedText)
-            .textFieldStyle(
-                CocoInputTextFieldStyle(
-                    leadingIcon: leadingIcon,
-                    isFocused: $internalFocus,
-                    placeHolder: placeholder,
-                    trailingIcon: trailingIcon,
-                    shouldInterceptFocus: shouldInterceptFocus,
-                    onFocusedAction: onFocusedAction
-                )
+        TextField(
+            placeholder ?? "",
+            text: $currentTypedText
+        )
+        .textFieldStyle(
+            CocoInputTextFieldStyle(
+                leadingIcon: leadingIcon,
+                isFocused: $internalFocus,
+                placeHolder: placeholder,
+                trailingIcon: trailingIcon,
+                shouldInterceptFocus: shouldInterceptFocus,
+                onFocusedAction: onFocusedAction
             )
-            .focused($isFocused)
-            .onChange(of: isFocused) { isFocused in
-                internalFocus = isFocused
-                onFocusedAction?(isFocused)
-            }
-            .font(.jakartaSans(forTextStyle: .body, weight: .medium))
-            .frame(height: kInputHeight)
+        )
+        .focused($isFocused)
+        .onChange(of: isFocused) { isFocused in
+            internalFocus = isFocused
+            onFocusedAction?(isFocused)
+        }
+        .font(.jakartaSans(forTextStyle: .body, weight: .medium))
+        .frame(height: kInputHeight)
     }
 }
