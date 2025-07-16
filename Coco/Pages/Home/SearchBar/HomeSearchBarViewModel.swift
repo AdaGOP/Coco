@@ -17,14 +17,12 @@ final class HomeSearchBarViewModel: ObservableObject {
     
     @Published var currentTypedText: String = ""
     
-    let isSecure: Bool
     let leadingIcon: UIImage?
     let trailingIcon: ImageHandler?
     let isTypeAble: Bool
     let placeholderText: String
     
     init(
-        isSecure: Bool = false,
         leadingIcon: UIImage?,
         placeholderText: String,
         currentTypedText: String,
@@ -32,7 +30,6 @@ final class HomeSearchBarViewModel: ObservableObject {
         isTypeAble: Bool,
         delegate: HomeSearchBarViewModelDelegate?
     ) {
-        self.isSecure = isSecure
         self.leadingIcon = leadingIcon
         self.placeholderText = placeholderText
         self.currentTypedText = currentTypedText
