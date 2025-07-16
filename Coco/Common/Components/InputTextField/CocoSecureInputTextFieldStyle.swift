@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct CocoSecureInputTextFieldStyle: TextFieldStyle {
-    @Binding private var isFocused: Bool
     @Binding private var isSecure: Bool
     
     let leadingIcon: UIImage?
@@ -18,13 +17,11 @@ struct CocoSecureInputTextFieldStyle: TextFieldStyle {
     
     init(
         leadingIcon: UIImage?,
-        isFocused: Binding<Bool>,
         isSecure: Binding<Bool>,
         placeHolder: String?,
         onFocusedAction: ((Bool) -> Void)?
     ) {
         self.leadingIcon = leadingIcon
-        _isFocused = isFocused
         _isSecure = isSecure
         self.placeHolder = placeHolder
         self.onFocusedAction = onFocusedAction
