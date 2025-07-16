@@ -14,7 +14,7 @@ protocol SignInViewModelDelegate: AnyObject {
 protocol SignInViewModelAction: AnyObject {
     func configureView(
         emailInputVM: HomeSearchBarViewModel,
-        passwordInputVM: HomeSearchBarViewModel
+        passwordInputVM: CocoSecureInputTextFieldViewModel
     )
 }
 

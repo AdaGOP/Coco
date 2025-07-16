@@ -8,7 +8,7 @@
 import Foundation
 
 protocol MyTripBookingListFetcherProtocol {
-    func fetchTripBookingList(request: TripBookingListSpec) async throws -> JSONArray<CreateBookingResponse>
+    func fetchTripBookingList(request: TripBookingListSpec) async throws -> JSONArray<BookingDetails>
 }
 
 final class MyTripBookingListFetcher: MyTripBookingListFetcherProtocol {
@@ -16,13 +16,13 @@ final class MyTripBookingListFetcher: MyTripBookingListFetcherProtocol {
         self.networkService = networkService
     }
     
-    func fetchTripBookingList(request: TripBookingListSpec) async throws -> JSONArray<CreateBookingResponse> {
+    func fetchTripBookingList(request: TripBookingListSpec) async throws -> JSONArray<BookingDetails> {
         try await networkService.request(
             urlString: CreateBookingEndpoint.getBookings.urlString,
             method: .post,
-            parameters: request.toDictionary() ?? [:],
+            parameters: [:],
             headers: [:],
-            body: nil
+            body: request
         )
     }
     

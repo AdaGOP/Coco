@@ -1,14 +1,14 @@
 //
-//  ProfileView.swift
+//  UserProfileView.swift
 //  Coco
 //
-//  Created by Jackie Leonardy on 15/07/25.
+//  Created by Jackie Leonardy on 16/07/25.
 //
 
 import Foundation
 import UIKit
 
-final class ProfileView: UIView {
+final class UserProfileView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -17,11 +17,9 @@ final class ProfileView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
 }
 
-private extension ProfileView {
+private extension UserProfileView {
     func setupView() {
         
     }

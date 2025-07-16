@@ -9,11 +9,14 @@ import Foundation
 
 enum UserEndpoint: EndpointProtocol {
     case all
+    case signIn
 
     var path: String {
         switch self {
         case .all:
             return "users"
+        case .signIn:
+            return "rpc/login"
         }
     }
 }

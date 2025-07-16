@@ -11,7 +11,9 @@ final class SignInViewModel {
     weak var delegate: (any SignInViewModelDelegate)?
     weak var actionDelegate: (any SignInViewModelAction)?
     
-    init() { }
+    init(fetcher: SignInFetcherProtocol = SignInFetcher()) {
+        self.fetcher = fetcher
+    }
 
     private lazy var emailInputVM: HomeSearchBarViewModel = HomeSearchBarViewModel(
         leadingIcon: nil,
@@ -22,23 +24,13 @@ final class SignInViewModel {
         delegate: nil
     )
     
-    private lazy var passwordInputVM: HomeSearchBarViewModel = HomeSearchBarViewModel(
-        isSecure: true,
+    private lazy var passwordInputVM: CocoSecureInputTextFieldViewModel = CocoSecureInputTextFieldViewModel(
         leadingIcon: nil,
         placeholderText: "Enter your password",
-        currentTypedText: "",
-        trailingIcon: (
-            image: CocoIcon.icFilterIcon.image,
-            didTap: {
-                
-            }
-        ),
-        isTypeAble: true,
-        delegate: nil
+        currentTypedText: ""
     )
     
-    private var tempPassword: String?
-    private var isPasswordShown: Bool = false
+    private let fetcher: SignInFetcherProtocol
 }
 
 extension SignInViewModel: SignInViewModelProtocol {
@@ -50,6 +42,20 @@ extension SignInViewModel: SignInViewModelProtocol {
     }
     
     func onSignInDidTap() {
-        delegate?.notifySignInDidSuccess()
+        fetcher.signIn(
+            spec: SignInSpec(
+                email: emailInputVM.currentTypedText,
+                password: passwordInputVM.currentTypedText
+            )
+        ) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(let success):
+                delegate?.notifySignInDidSuccess()
+                UserDefaults.standard.setValue(success.userId, forKey: "user-id")
+            case .failure(let failure):
+                break
+            }
+        }
     }
 }

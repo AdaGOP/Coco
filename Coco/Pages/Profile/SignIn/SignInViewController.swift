@@ -37,13 +37,13 @@ final class SignInViewController: UIViewController {
 extension SignInViewController: SignInViewModelAction {
     func configureView(
         emailInputVM: HomeSearchBarViewModel,
-        passwordInputVM: HomeSearchBarViewModel
+        passwordInputVM: CocoSecureInputTextFieldViewModel
     ) {
         let emailInputVC: HomeSearchBarHostingController = HomeSearchBarHostingController(viewModel: emailInputVM)
         addChild(emailInputVC)
        
         
-        let passwordInputVC: HomeSearchBarHostingController = HomeSearchBarHostingController(viewModel: passwordInputVM)
+        let passwordInputVC: CocoSecureInputTextFieldHostingController = CocoSecureInputTextFieldHostingController(viewModel: passwordInputVM)
         addChild(passwordInputVC)
         
         thisView.configureInputView(datas: [

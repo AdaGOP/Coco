@@ -44,28 +44,12 @@ struct CocoInputTextField: View {
     var body: some View {
         TextField(
             placeholder ?? "",
-            text: Binding(
-                get: {
-                    isSecure ? String(repeating: "•", count: currentTypedText.count) : currentTypedText
-                },
-                set: { newValue in
-                    // If secure, only accept added/deleted characters
-                    if newValue.count < currentTypedText.count {
-                        currentTypedText = String(currentTypedText.dropLast(currentTypedText.count - newValue.count))
-                    } else if newValue.count > currentTypedText.count {
-                        // Add only the last character typed
-                        if let last = newValue.last {
-                            currentTypedText.append(last)
-                        }
-                    }
-                }
-            )
+            text: $currentTypedText
         )
         .textFieldStyle(
             CocoInputTextFieldStyle(
                 leadingIcon: leadingIcon,
                 isFocused: $internalFocus,
-                isSecure: $isSecure,
                 placeHolder: placeholder,
                 trailingIcon: trailingIcon,
                 shouldInterceptFocus: shouldInterceptFocus,

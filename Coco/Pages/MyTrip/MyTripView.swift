@@ -41,6 +41,7 @@ private extension MyTripView {
         backgroundColor = Token.additionalColorsWhite
         
         let scrollView: UIScrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
         
         scrollView.addSubviewAndLayout(contentStackView)
         contentStackView.layout {
