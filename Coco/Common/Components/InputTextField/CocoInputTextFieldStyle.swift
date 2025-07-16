@@ -11,8 +11,6 @@ import SwiftUI
 typealias ImageHandler = (image: UIImage, didTap: (() -> Void)?)
 
 struct CocoInputTextFieldStyle: TextFieldStyle {
-    @Binding private var isFocused: Bool
-    
     let leadingIcon: UIImage?
     let placeHolder: String?
     let trailingIcon: ImageHandler?
@@ -21,14 +19,12 @@ struct CocoInputTextFieldStyle: TextFieldStyle {
     
     init(
         leadingIcon: UIImage?,
-        isFocused: Binding<Bool>,
         placeHolder: String?,
         trailingIcon: ImageHandler?,
         shouldInterceptFocus: Bool,
         onFocusedAction: ((Bool) -> Void)?
     ) {
         self.leadingIcon = leadingIcon
-        _isFocused = isFocused
         self.placeHolder = placeHolder
         self.trailingIcon = trailingIcon
         self.shouldInterceptFocus = shouldInterceptFocus

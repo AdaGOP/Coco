@@ -14,7 +14,6 @@ struct CocoSecureInputTextField: View {
     @ObservedObject var viewModel: CocoSecureInputTextFieldViewModel
     @State private var isSecure: Bool = true
     
-    @State private var internalFocus: Bool = false
     @FocusState private var isFocused: Bool
     private let onFocusedAction: ((Bool) -> Void)?
     
@@ -42,10 +41,10 @@ struct CocoSecureInputTextField: View {
                 .autocorrectionDisabled()
             }
         }
+        .ignoresSafeArea(.keyboard)
         .textFieldStyle(
             CocoSecureInputTextFieldStyle(
                 leadingIcon: viewModel.leadingIcon,
-                isFocused: $internalFocus,
                 isSecure: $isSecure,
                 placeHolder: viewModel.placeholderText,
                 onFocusedAction: onFocusedAction
@@ -53,7 +52,6 @@ struct CocoSecureInputTextField: View {
         )
         .focused($isFocused)
         .onChange(of: isFocused) { isFocused in
-            internalFocus = isFocused
             onFocusedAction?(isFocused)
         }
         .font(.jakartaSans(forTextStyle: .body, weight: .medium))

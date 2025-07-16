@@ -13,7 +13,6 @@ struct HomeSearchBarView: View {
     
     var body: some View {
         CocoInputTextField(
-            isSecure: viewModel.isSecure,
             leadingIcon: viewModel.leadingIcon,
             currentTypedText: $viewModel.currentTypedText,
             trailingIcon: viewModel.trailingIcon,
@@ -21,7 +20,6 @@ struct HomeSearchBarView: View {
             shouldInterceptFocus: !viewModel.isTypeAble,
             onFocusedAction: viewModel.onTextFieldFocusDidChange(to:)
         )
-        .frame(height: 52.0)
     }
 }
 
