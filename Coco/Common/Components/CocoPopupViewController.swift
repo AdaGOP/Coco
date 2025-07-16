@@ -65,12 +65,12 @@ private class PopupPresentationController: UIPresentationController {
     private let dimmingView = UIView()
 
     override func presentationTransitionWillBegin() {
-//        guard let containerView else { return }
+        guard let containerView else { return }
 
         dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        dimmingView.frame = containerView!.bounds
+        dimmingView.frame = containerView.bounds
         dimmingView.alpha = 0
-        containerView!.insertSubview(dimmingView, at: 0)
+        containerView.insertSubview(dimmingView, at: 0)
 
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
             self.dimmingView.alpha = 1
