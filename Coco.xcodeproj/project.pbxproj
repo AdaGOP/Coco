@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
-		5B3D62A62DF16A6A00552CCC /* PBXContainerItemProxy */ = {
+		5B7AF87D2E274B730036CFF5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5B3D62872DF16A6900552CCC /* Project object */;
 			proxyType = 1;
@@ -18,7 +18,7 @@
 
 /* Begin PBXFileReference section */
 		5B3D628F2DF16A6900552CCC /* Coco.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coco.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B3D62A52DF16A6A00552CCC /* CocoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B7AF8792E274B730036CFF5 /* CocoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -40,7 +40,7 @@
 			path = Coco;
 			sourceTree = "<group>";
 		};
-		5B3D62A82DF16A6A00552CCC /* CocoTests */ = {
+		5B7AF87A2E274B730036CFF5 /* CocoTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CocoTests;
 			sourceTree = "<group>";
@@ -55,7 +55,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5B3D62A22DF16A6A00552CCC /* Frameworks */ = {
+		5B7AF8762E274B730036CFF5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -69,7 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				5B3D62912DF16A6900552CCC /* Coco */,
-				5B3D62A82DF16A6A00552CCC /* CocoTests */,
+				5B7AF87A2E274B730036CFF5 /* CocoTests */,
 				5B3D62902DF16A6900552CCC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,7 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				5B3D628F2DF16A6900552CCC /* Coco.app */,
-				5B3D62A52DF16A6A00552CCC /* CocoTests.xctest */,
+				5B7AF8792E274B730036CFF5 /* CocoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,27 +109,27 @@
 			productReference = 5B3D628F2DF16A6900552CCC /* Coco.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5B3D62A42DF16A6A00552CCC /* CocoTests */ = {
+		5B7AF8782E274B730036CFF5 /* CocoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5B3D62BD2DF16A6A00552CCC /* Build configuration list for PBXNativeTarget "CocoTests" */;
+			buildConfigurationList = 5B7AF87F2E274B730036CFF5 /* Build configuration list for PBXNativeTarget "CocoTests" */;
 			buildPhases = (
-				5B3D62A12DF16A6A00552CCC /* Sources */,
-				5B3D62A22DF16A6A00552CCC /* Frameworks */,
-				5B3D62A32DF16A6A00552CCC /* Resources */,
+				5B7AF8752E274B730036CFF5 /* Sources */,
+				5B7AF8762E274B730036CFF5 /* Frameworks */,
+				5B7AF8772E274B730036CFF5 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				5B3D62A72DF16A6A00552CCC /* PBXTargetDependency */,
+				5B7AF87E2E274B730036CFF5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				5B3D62A82DF16A6A00552CCC /* CocoTests */,
+				5B7AF87A2E274B730036CFF5 /* CocoTests */,
 			);
 			name = CocoTests;
 			packageProductDependencies = (
 			);
 			productName = CocoTests;
-			productReference = 5B3D62A52DF16A6A00552CCC /* CocoTests.xctest */;
+			productReference = 5B7AF8792E274B730036CFF5 /* CocoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -145,7 +145,7 @@
 					5B3D628E2DF16A6900552CCC = {
 						CreatedOnToolsVersion = 16.0;
 					};
-					5B3D62A42DF16A6A00552CCC = {
+					5B7AF8782E274B730036CFF5 = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = 5B3D628E2DF16A6900552CCC;
 					};
@@ -169,7 +169,7 @@
 			projectRoot = "";
 			targets = (
 				5B3D628E2DF16A6900552CCC /* Coco */,
-				5B3D62A42DF16A6A00552CCC /* CocoTests */,
+				5B7AF8782E274B730036CFF5 /* CocoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -182,7 +182,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5B3D62A32DF16A6A00552CCC /* Resources */ = {
+		5B7AF8772E274B730036CFF5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -221,7 +221,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5B3D62A12DF16A6A00552CCC /* Sources */ = {
+		5B7AF8752E274B730036CFF5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -231,10 +231,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5B3D62A72DF16A6A00552CCC /* PBXTargetDependency */ = {
+		5B7AF87E2E274B730036CFF5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5B3D628E2DF16A6900552CCC /* Coco */;
-			targetProxy = 5B3D62A62DF16A6A00552CCC /* PBXContainerItemProxy */;
+			targetProxy = 5B7AF87D2E274B730036CFF5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -426,7 +426,7 @@
 			};
 			name = Release;
 		};
-		5B3D62BE2DF16A6A00552CCC /* Debug */ = {
+		5B7AF8802E274B730036CFF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -434,22 +434,17 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4H3L55V83P;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.CocoTests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.academy.CocoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Coco.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Coco";
 			};
 			name = Debug;
 		};
-		5B3D62BF2DF16A6A00552CCC /* Release */ = {
+		5B7AF8812E274B730036CFF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -457,17 +452,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4H3L55V83P;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.CocoTests";
+				PRODUCT_BUNDLE_IDENTIFIER = com.academy.CocoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Coco.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Coco";
 			};
 			name = Release;
@@ -493,11 +483,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5B3D62BD2DF16A6A00552CCC /* Build configuration list for PBXNativeTarget "CocoTests" */ = {
+		5B7AF87F2E274B730036CFF5 /* Build configuration list for PBXNativeTarget "CocoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5B3D62BE2DF16A6A00552CCC /* Debug */,
-				5B3D62BF2DF16A6A00552CCC /* Release */,
+				5B7AF8802E274B730036CFF5 /* Debug */,
+				5B7AF8812E274B730036CFF5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
