@@ -8,7 +8,6 @@
 import Foundation
 
 final class MyTripViewModel {
-    weak var delegate: (any MyTripViewModelDelegate)?
     weak var actionDelegate: (any MyTripViewModelAction)?
     
     init(fetcher: MyTripBookingListFetcherProtocol = MyTripBookingListFetcher()) {
@@ -36,6 +35,6 @@ extension MyTripViewModel: MyTripViewModelProtocol {
     
     func onTripListDidTap(at index: Int) {
         guard index < responses.count else { return }
-        delegate?.notifyTripListDidTap(with: responses[index])
+        actionDelegate?.goToBookingDetail(with: responses[index])
     }
 }

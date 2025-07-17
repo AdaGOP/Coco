@@ -8,9 +8,7 @@
 import Foundation
 import UIKit
 
-protocol MyTripViewDelegate: AnyObject {
-    func notifyTripListDidTap(at index: Int)
-}
+protocol MyTripViewDelegate: MyTripListCardViewDelegate { }
 
 final class MyTripView: UIView {
     weak var delegate: MyTripViewDelegate?
@@ -28,6 +26,7 @@ final class MyTripView: UIView {
         contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         datas.enumerated().forEach { (index, data) in
             let view: MyTripListCardView = MyTripListCardView()
+            view.delegate = delegate
             view.configureView(dataModel: data, index: index)
             contentStackView.addArrangedSubview(view)
         }
