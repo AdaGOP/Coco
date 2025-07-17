@@ -19,6 +19,12 @@ jobs:
         with:
           xcode-version: '15.0'
 
+      - name: Debug folder structure
+        run: |
+          pwd
+          ls -R
+
+
       - name: Run Tests
         run: |
           xcodebuild test \
