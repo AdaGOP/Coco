@@ -28,7 +28,7 @@ final class HomeCoordinator: BaseCoordinator {
         
         switch input.flow {
         case .activityDetail(let data):
-            let detailViewModel = ActivityDetailViewModel(
+            let detailViewModel: ActivityDetailViewModel = ActivityDetailViewModel(
                 data: data
             )
             detailViewModel.navigationDelegate = self

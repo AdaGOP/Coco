@@ -24,6 +24,7 @@ final class MyTripViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "My Trip"
         thisView.delegate = self
     }
     
@@ -44,10 +45,22 @@ extension MyTripViewController: MyTripViewModelAction {
     func configureView(datas: [MyTripListCardDataModel]) {
         thisView.configureView(datas: datas)
     }
+    
+    func goToBookingDetail(with data: BookingDetails) {
+        guard let navigationController else { return }
+        let coordinator: MyTripCoordinator = MyTripCoordinator(
+            input: .init(
+                navigationController: navigationController,
+                flow: .bookingDetail(data: data)
+            )
+        )
+        coordinator.parentCoordinator = AppCoordinator.shared
+        coordinator.start()
+    }
 }
 
 extension MyTripViewController: MyTripViewDelegate {
-    func notifyTripListDidTap(at index: Int) {
+    func notifyTripListCardDidTap(at index: Int) {
         viewModel.onTripListDidTap(at: index)
     }
 }

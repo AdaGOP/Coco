@@ -15,8 +15,7 @@ struct MyTripTabItem: TabItemRepresentable {
 
     func makeRootViewController() -> UIViewController {
         let viewModel: MyTripViewModel = MyTripViewModel()
-        let vc = MyTripViewController(viewModel: viewModel)
-        vc.title = "MyTrip"
+        let vc: MyTripViewController = MyTripViewController(viewModel: viewModel)
         return vc
     }
 }
