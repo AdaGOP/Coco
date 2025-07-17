@@ -26,3 +26,4 @@ jobs:
             -scheme Coco \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.4'
             -only-testing:CocoTests
+        working-directory: ./
