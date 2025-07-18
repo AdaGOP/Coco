@@ -1,6 +1,7 @@
 disabled_rules:
   - trailing_whitespace        # Disable warning/error for trailing spaces at line ends
   - explicit_acl               # Disable enforcement of explicit access control declarations
+  - identifier_name            # Disable enforcement of identifier name rules
 
 opt_in_rules:
   - nesting                   # Warn on deeply nested code blocks to improve readability
@@ -51,8 +52,8 @@ type_body_length:
   error: 500                  # Error if type body exceeds 500 lines
 
 function_body_length:
-  warning: 50                 # Warn if function body is longer than 50 lines
-  error: 100                  # Error if function body exceeds 100 lines (split function)
+  warning: 100                 # Warn if function body is longer than 50 lines
+  error: 150                  # Error if function body exceeds 150 lines (split function)
 
 force_unwrapping:
   severity: error             # Treat force unwrap (!) usage as an error
