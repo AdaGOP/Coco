@@ -30,6 +30,7 @@ struct BookingDetails: JSONDecodable {
     let activityDate: String
     let activityTitle: String
     let bookingCreatedAt: String
+    let address: String
 
     enum CodingKeys: String, CodingKey {
         case status
@@ -42,6 +43,7 @@ struct BookingDetails: JSONDecodable {
         case activityDate = "activity_date"
         case activityTitle = "activity_title"
         case bookingCreatedAt = "booking_created_at"
+        case address
     }
 }
 

@@ -19,6 +19,8 @@ struct BookingDetailDataModel {
     let paxNumber: Int
     
     let price: Double
+    
+    let address: String
 }
 
 final class TripDetailView: UIView {
@@ -43,6 +45,8 @@ final class TripDetailView: UIView {
         
         priceDetailTitle.text = "Pay During Trip"
         priceDetailPrice.text = "Rp\(data.price)"
+        
+        addressLabel.text = data.address
     }
     
     private lazy var activityDetailView: UIView = createActivityDetailView()
@@ -97,6 +101,13 @@ final class TripDetailView: UIView {
         numberOfLines: 2
     )
     
+    private lazy var addressSection: UIView = createSectionTitle(title: "Meeting Point", view: addressLabel)
+    private lazy var addressLabel: UILabel = UILabel(
+        font: .jakartaSans(forTextStyle: .body, weight: .bold),
+        textColor: Token.additionalColorsBlack,
+        numberOfLines: 0
+    )
+    
     private lazy var priceDetailSection: UIView = createLeftRightAlignment(lhs: priceDetailTitle, rhs: priceDetailPrice)
 }
 
@@ -137,6 +148,7 @@ private extension TripDetailView {
         contentStackView.addArrangedSubview(createLineDivider())
         contentStackView.addArrangedSubview(priceDetailSection)
         contentStackView.addArrangedSubview(createLineDivider())
+        contentStackView.addArrangedSubview(addressSection)
         
         backgroundColor = Token.additionalColorsWhite
     }

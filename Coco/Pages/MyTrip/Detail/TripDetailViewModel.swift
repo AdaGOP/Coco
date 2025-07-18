@@ -27,7 +27,8 @@ extension TripDetailViewModel: TripDetailViewModelProtocol {
             bookingDateText: data.activityDate,
             status: data.status,
             paxNumber: data.participants,
-            price: data.totalPrice
+            price: data.totalPrice,
+            address: data.address
         )
         actionDelegate?.configureView(dataModel: dataModel)
     }
