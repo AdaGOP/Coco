@@ -19,12 +19,33 @@ final class UserProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        viewModel.onViewDidLoad()
+    }
+    
+    override func loadView() {
+        view = thisView
+    }
+    
     private let viewModel: UserProfileViewModelProtocol
     private let thisView: UserProfileView = UserProfileView()
 }
 
 extension UserProfileViewController: UserProfileViewModelAction {
     func configureView() {
+        let buttonHosting: CocoButtonHostingController = CocoButtonHostingController(
+            action: { [weak self] in
+                self?.viewModel.onLogoutDidTap()
+            },
+            text: "Log out",
+            style: .large,
+            type: .secondary,
+            isStretch: true
+        )
         
+        addChild(buttonHosting)
+        thisView.addlogoutButton(with: buttonHosting.view)
+        buttonHosting.didMove(toParent: self)
     }
 }

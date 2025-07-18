@@ -30,6 +30,7 @@ extension ProfileViewModel: SignInViewModelDelegate {
 
 extension ProfileViewModel: UserProfileViewModelDelegate {
     func notifyUserDidLogout() {
+        UserDefaults.standard.removeObject(forKey: "user-id")
         showSignInView()
     }
 }

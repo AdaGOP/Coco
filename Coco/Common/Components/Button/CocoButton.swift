@@ -56,6 +56,10 @@ struct CocoButtonStyleConfiguration: ButtonStyle {
             .foregroundColor(type.textColor)
             .background(type.backgroundColor)
             .cornerRadius(style.cornerRadius)
+            .overlay {
+                RoundedRectangle(cornerRadius: style.cornerRadius)
+                    .strokeBorder(type.borderColor ?? .clear, lineWidth: 1.0)
+            }
     }
 }
 
