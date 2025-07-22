@@ -27,4 +27,5 @@ enum CocoIcon {
     static let icCheckoutCompleteIcon: Icon = Icon(iconName: "checkoutCompleteIcon")
     static let icCalendarIcon: Icon = Icon(iconName: "calendarIcon")
     static let icuserIcon: Icon = Icon(iconName: "userIcon")
+    static let splashLogo: Icon = Icon(iconName: "splashLogo")
 }

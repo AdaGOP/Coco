@@ -3,7 +3,8 @@
     {
       "idiom" : "universal",
       "platform" : "ios",
-      "size" : "1024x1024"
+      "size" : "366x366",
+      "filename": "LauncherIcon.png"
     },
     {
       "appearances" : [

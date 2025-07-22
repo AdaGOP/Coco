@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var appCoordinator: AppCoordinator?
+    var splashView: UIView?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
@@ -30,6 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator?.setNavigationController(currentActiveNavigationController)
         
         rootViewController.baseCoordinator = appCoordinator
+        showSplashScreen(over: window)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -61,3 +63,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
+private extension SceneDelegate {
+    func showSplashScreen(over window: UIWindow) {
+        let logo: UIImageView = UIImageView(image: CocoIcon.splashLogo.image)
+        logo.translatesAutoresizingMaskIntoConstraints = false
+
+        window.addSubview(logo)
+        
+        NSLayoutConstraint.activate([
+            logo.topAnchor.constraint(equalTo: window.topAnchor),
+            logo.bottomAnchor.constraint(equalTo: window.bottomAnchor),
+            logo.leadingAnchor.constraint(equalTo: window.leadingAnchor),
+            logo.trailingAnchor.constraint(equalTo: window.trailingAnchor)
+        ])
+        
+        self.splashView = logo
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.dismissSplash()
+        }
+    }
+
+    func dismissSplash() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.splashView?.alpha = 0
+        }) { _ in
+            self.splashView?.removeFromSuperview()
+            self.splashView = nil
+        }
+    }
+}
