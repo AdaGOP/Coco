@@ -32,19 +32,9 @@ final class HomeFormScheduleView: UIView {
         activityDescription.text = data.packageName
     }
     
-    func addCalendarInputView(from view: UIView) {
-        calendarInputView.subviews.forEach { $0.removeFromSuperview() }
-        calendarInputView.addSubviewAndLayout(view)
-    }
-    
-    func addPaxInutView(from view: UIView) {
-        paxInputView.subviews.forEach { $0.removeFromSuperview() }
-        paxInputView.addSubviewAndLayout(view)
-    }
-    
-    func addCheckoutButtonView(from view: UIView) {
-        checkoutButtonContainer.subviews.forEach { $0.removeFromSuperview() }
-        checkoutButtonContainer.addSubviewAndLayout(view)
+    func addInputView(from view: UIView) {
+        inputContainerView.subviews.forEach { $0.removeFromSuperview() }
+        inputContainerView.addSubviewAndLayout(view)
     }
     
     private lazy var activityDetailView: UIView = createActivityDetailView()
@@ -65,12 +55,7 @@ final class HomeFormScheduleView: UIView {
         numberOfLines: 2
     )
     
-    private lazy var calencarInputContainerView: UIView = createSectionView(title: "Date Visit", contentView: calendarInputView)
-    private lazy var calendarInputView: UIView = UIView()
-    
-    private lazy var paxInputContainerView: UIView = createSectionView(title: "Number Of Pople", contentView: paxInputView)
-    private lazy var paxInputView: UIView = UIView()
-    private lazy var checkoutButtonContainer: UIView = UIView()
+    private lazy var inputContainerView: UIView = UIView()
 }
 
 private extension HomeFormScheduleView {
@@ -86,57 +71,26 @@ private extension HomeFormScheduleView {
         
         let sectionStackView: UIStackView = UIStackView(arrangedSubviews: [
             activityDetailView,
-            sectionTitleLabel,
-            calencarInputContainerView,
-            paxInputContainerView
+            sectionTitleLabel
         ])
         sectionStackView.axis = .vertical
         sectionStackView.spacing = 16.0
+        sectionStackView.distribution = .fillProportionally
         
         addSubview(sectionStackView)
-        addSubview(checkoutButtonContainer)
+        addSubview(inputContainerView)
         sectionStackView.layout {
             $0.top(to: self.safeAreaLayoutGuide.topAnchor, constant: 8.0)
                 .leading(to: self.leadingAnchor, constant: 27.0)
                 .trailing(to: self.trailingAnchor, constant: -27.0)
         }
         
-        checkoutButtonContainer.layout {
-            $0.top(to: sectionStackView.bottomAnchor, relation: .greaterThanOrEqual, constant: 8.0)
+        inputContainerView.layout {
+            $0.top(to: sectionStackView.bottomAnchor, constant: 16.0)
                 .leading(to: self.leadingAnchor, constant: 27.0)
                 .trailing(to: self.trailingAnchor, constant: -27.0)
                 .bottom(to: self.bottomAnchor, constant: -8.0)
         }
-    }
-    
-    func createSectionView(title: String, contentView: UIView) -> UIView {
-        let containerTitle = UILabel(
-            font: .jakartaSans(forTextStyle: .footnote, weight: .medium),
-            textColor: Token.grayscale70,
-            numberOfLines: 0
-        )
-        containerTitle.text = title
-        
-        let containerView: UIView = UIView()
-        containerView.addSubviews([
-            containerTitle,
-            contentView
-        ])
-        
-        containerTitle.layout {
-            $0.leading(to: containerView.leadingAnchor)
-                .top(to: containerView.topAnchor)
-                .trailing(to: containerView.trailingAnchor, relation: .lessThanOrEqual)
-        }
-        
-        contentView.layout {
-            $0.top(to: containerTitle.bottomAnchor, constant: 8.0)
-                .leading(to: containerView.leadingAnchor)
-                .trailing(to: containerView.trailingAnchor)
-                .bottom(to: containerView.bottomAnchor)
-        }
-        
-        return containerView
     }
     
     

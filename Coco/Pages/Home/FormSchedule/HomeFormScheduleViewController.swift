@@ -8,6 +8,45 @@
 import Foundation
 import UIKit
 
+
+import SwiftUI
+
+struct HomeFormScheduleViewss: View {
+    @ObservedObject var calendarViewModel: HomeSearchBarViewModel
+    @ObservedObject var paxInputViewModel: HomeSearchBarViewModel
+    
+    var actionButtonAction: () -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16.0) {
+            VStack(alignment: .leading, spacing: 8.0) {
+                Text("Date Visit")
+                    .font(.jakartaSans(forTextStyle: .footnote, weight: .medium))
+                    .foregroundStyle(Token.grayscale70.toColor())
+                
+                HomeSearchBarView(viewModel: calendarViewModel)
+            }
+            
+            VStack(alignment: .leading, spacing: 8.0) {
+                Text("Number of People")
+                    .font(.jakartaSans(forTextStyle: .footnote, weight: .medium))
+                    .foregroundStyle(Token.grayscale70.toColor())
+                HomeSearchBarView(viewModel: paxInputViewModel)
+            }
+            
+            Spacer()
+            
+            CocoButton(
+                action: actionButtonAction,
+                text: "Checkout",
+                style: .large,
+                type: .primary
+            )
+            .stretch()
+        }
+    }
+}
+
 final class HomeFormScheduleViewController: UIViewController {
     init(viewModel: HomeFormScheduleViewModelProtocol) {
         self.viewModel = viewModel
@@ -38,28 +77,18 @@ extension HomeFormScheduleViewController: HomeFormScheduleViewModelAction {
         calendarViewModel: HomeSearchBarViewModel,
         paxInputViewModel: HomeSearchBarViewModel
     ) {
-        let calendarVC: HomeSearchBarHostingController = HomeSearchBarHostingController(viewModel: calendarViewModel)
-        addChild(calendarVC)
-        thisView.addCalendarInputView(from: calendarVC.view)
-        calendarVC.didMove(toParent: self)
-        
-        let paxInputVC: HomeSearchBarHostingController = HomeSearchBarHostingController(viewModel: paxInputViewModel)
-        addChild(paxInputVC)
-        thisView.addPaxInutView(from: paxInputVC.view)
-        paxInputVC.didMove(toParent: self)
-        
-        let buttonHostingVC: CocoButtonHostingController = CocoButtonHostingController(
-            action: { [weak self] in
-                self?.viewModel.onCheckout()
-            },
-            text: "Checkout",
-            style: .large,
-            type: .primary
+        let inputVC: UIHostingController = UIHostingController(
+            rootView: HomeFormScheduleViewss(
+                calendarViewModel: calendarViewModel,
+                paxInputViewModel: paxInputViewModel,
+                actionButtonAction: { [weak self] in
+                    self?.viewModel.onCheckout()
+                }
+            )
         )
-        
-        addChild(buttonHostingVC)
-        thisView.addCheckoutButtonView(from: buttonHostingVC.view)
-        buttonHostingVC.didMove(toParent: self)
+        addChild(inputVC)
+        thisView.addInputView(from: inputVC.view)
+        inputVC.didMove(toParent: self)
     }
     
     func configureView(data: HomeFormScheduleViewData) {

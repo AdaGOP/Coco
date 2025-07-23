@@ -64,7 +64,7 @@ struct ActivityDetailDataModel {
             title: "Available Packages",
             content: response.packages.map {
                 Package(
-                    imageUrlString: "https://picsum.photos/id/237/600/341", // TODO: WIRING
+                    imageUrlString: $0.host.profileImageUrl,
                     name: $0.name,
                     description: "Min.\($0.minParticipants) - Max.\($0.maxParticipants)",
                     price: "Rp\($0.pricePerPerson)",
