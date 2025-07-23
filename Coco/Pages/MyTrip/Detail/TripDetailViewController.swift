@@ -37,5 +37,12 @@ final class TripDetailViewController: UIViewController {
 extension TripDetailViewController: TripDetailViewModelAction {
     func configureView(dataModel: BookingDetailDataModel) {
         thisView.configureView(dataModel)
+        
+        let labelVC: CocoStatusLabelHostingController = CocoStatusLabelHostingController(
+            title: dataModel.status.text,
+            style: dataModel.status.style
+        )
+        thisView.configureStatusLabelView(with: labelVC.view)
+        labelVC.didMove(toParent: self)
     }
 }
