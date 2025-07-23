@@ -6,46 +6,8 @@
 //
 
 import Foundation
-import UIKit
-
-
 import SwiftUI
-
-struct HomeFormScheduleViewss: View {
-    @ObservedObject var calendarViewModel: HomeSearchBarViewModel
-    @ObservedObject var paxInputViewModel: HomeSearchBarViewModel
-    
-    var actionButtonAction: () -> Void
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16.0) {
-            VStack(alignment: .leading, spacing: 8.0) {
-                Text("Date Visit")
-                    .font(.jakartaSans(forTextStyle: .footnote, weight: .medium))
-                    .foregroundStyle(Token.grayscale70.toColor())
-                
-                HomeSearchBarView(viewModel: calendarViewModel)
-            }
-            
-            VStack(alignment: .leading, spacing: 8.0) {
-                Text("Number of People")
-                    .font(.jakartaSans(forTextStyle: .footnote, weight: .medium))
-                    .foregroundStyle(Token.grayscale70.toColor())
-                HomeSearchBarView(viewModel: paxInputViewModel)
-            }
-            
-            Spacer()
-            
-            CocoButton(
-                action: actionButtonAction,
-                text: "Checkout",
-                style: .large,
-                type: .primary
-            )
-            .stretch()
-        }
-    }
-}
+import UIKit
 
 final class HomeFormScheduleViewController: UIViewController {
     init(viewModel: HomeFormScheduleViewModelProtocol) {
@@ -78,7 +40,7 @@ extension HomeFormScheduleViewController: HomeFormScheduleViewModelAction {
         paxInputViewModel: HomeSearchBarViewModel
     ) {
         let inputVC: UIHostingController = UIHostingController(
-            rootView: HomeFormScheduleViewss(
+            rootView: HomeFormScheduleInputView(
                 calendarViewModel: calendarViewModel,
                 paxInputViewModel: paxInputViewModel,
                 actionButtonAction: { [weak self] in

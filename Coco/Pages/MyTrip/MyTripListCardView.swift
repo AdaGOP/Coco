@@ -34,6 +34,7 @@ final class MyTripListCardView: UIView {
         locationLabel.text = dataModel.location
         totalPaxLabel.text = "\(dataModel.totalPax) person"
         totalPriceLabel.text = dataModel.price
+        imageView.loadImage(from: URL(string: dataModel.imageUrl))
     }
     
     private lazy var imageView: UIImageView = createImageView()

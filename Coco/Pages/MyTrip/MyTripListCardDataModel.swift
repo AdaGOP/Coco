@@ -22,7 +22,24 @@ struct MyTripListCardDataModel {
     }
     
     init(bookingDetail: BookingDetails) {
-        statusLabel = StatusLabel(text: bookingDetail.status, style: .unpaid) // TODO: BE Map based on enum
+        var bookingStatus: String = bookingDetail.status
+        
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        
+        if let targetDate: Date = formatter.date(from: bookingDetail.activityDate) {
+            let calendar: Calendar = Calendar.current
+            let today: Date = Date()
+            
+            if targetDate < today {
+                bookingStatus = "Completed"
+            }
+            else if targetDate > today {
+                bookingStatus = "Upcoming"
+            }
+        }
+        
+        statusLabel = StatusLabel(text: bookingStatus, style: .unpaid)
         imageUrl = bookingDetail.destination.imageUrl ?? ""
         dateText = bookingDetail.activityDate
         title = bookingDetail.activityTitle
