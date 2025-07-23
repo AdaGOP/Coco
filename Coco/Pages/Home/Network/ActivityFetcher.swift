@@ -29,9 +29,9 @@ final class ActivityFetcher: ActivityFetcherProtocol {
         networkService.request(
             urlString: ActivityEndpoint.all.urlString,
             method: .post,
-            parameters: request.toDictionary() ?? [:],
+            parameters: [:],
             headers: [:],
-            body: nil,
+            body: request,
             completion: completion
         )
     }

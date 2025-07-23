@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import UIKit
 
 final class HomeFormScheduleViewController: UIViewController {
@@ -38,28 +39,18 @@ extension HomeFormScheduleViewController: HomeFormScheduleViewModelAction {
         calendarViewModel: HomeSearchBarViewModel,
         paxInputViewModel: HomeSearchBarViewModel
     ) {
-        let calendarVC: HomeSearchBarHostingController = HomeSearchBarHostingController(viewModel: calendarViewModel)
-        addChild(calendarVC)
-        thisView.addCalendarInputView(from: calendarVC.view)
-        calendarVC.didMove(toParent: self)
-        
-        let paxInputVC: HomeSearchBarHostingController = HomeSearchBarHostingController(viewModel: paxInputViewModel)
-        addChild(paxInputVC)
-        thisView.addPaxInutView(from: paxInputVC.view)
-        paxInputVC.didMove(toParent: self)
-        
-        let buttonHostingVC: CocoButtonHostingController = CocoButtonHostingController(
-            action: { [weak self] in
-                self?.viewModel.onCheckout()
-            },
-            text: "Checkout",
-            style: .large,
-            type: .primary
+        let inputVC: UIHostingController = UIHostingController(
+            rootView: HomeFormScheduleInputView(
+                calendarViewModel: calendarViewModel,
+                paxInputViewModel: paxInputViewModel,
+                actionButtonAction: { [weak self] in
+                    self?.viewModel.onCheckout()
+                }
+            )
         )
-        
-        addChild(buttonHostingVC)
-        thisView.addCheckoutButtonView(from: buttonHostingVC.view)
-        buttonHostingVC.didMove(toParent: self)
+        addChild(inputVC)
+        thisView.addInputView(from: inputVC.view)
+        inputVC.didMove(toParent: self)
     }
     
     func configureView(data: HomeFormScheduleViewData) {
