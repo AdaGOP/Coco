@@ -99,7 +99,7 @@ private extension HomeActivityCell {
     
     func createAreaView() -> UIView {
         let imageView: UIImageView = UIImageView(image: CocoIcon.icActivityAreaIcon.image)
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layout {
             $0.size(20)
         }

@@ -23,23 +23,25 @@ struct MyTripListCardDataModel {
     
     init(bookingDetail: BookingDetails) {
         var bookingStatus: String = bookingDetail.status
+        var statusStyle: CocoStatusLabelStyle = .pending
         
         let formatter: DateFormatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
         
         if let targetDate: Date = formatter.date(from: bookingDetail.activityDate) {
-            let calendar: Calendar = Calendar.current
             let today: Date = Date()
             
             if targetDate < today {
                 bookingStatus = "Completed"
+                statusStyle = .success
             }
             else if targetDate > today {
                 bookingStatus = "Upcoming"
+                statusStyle = .refund
             }
         }
         
-        statusLabel = StatusLabel(text: bookingStatus, style: .unpaid)
+        statusLabel = StatusLabel(text: bookingStatus, style: statusStyle)
         imageUrl = bookingDetail.destination.imageUrl ?? ""
         dateText = bookingDetail.activityDate
         title = bookingDetail.activityTitle

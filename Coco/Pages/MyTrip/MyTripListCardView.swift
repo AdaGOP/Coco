@@ -105,7 +105,7 @@ private extension MyTripListCardView {
         
         let locationContentView: UIView = UIView()
         let locationIconImageView: UIImageView = UIImageView(image: CocoIcon.icPinPointBlue.getImageWithTintColor(Token.additionalColorsBlack))
-        locationIconImageView.contentMode = .scaleAspectFit
+        locationIconImageView.contentMode = .scaleAspectFill
         locationIconImageView.layout {
             $0.size(12)
         }
@@ -227,7 +227,7 @@ private extension MyTripListCardView {
     
     func createImageView() -> UIImageView {
         let imageView: UIImageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 14.0
         imageView.layout {

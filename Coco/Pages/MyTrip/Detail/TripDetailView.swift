@@ -15,12 +15,49 @@ struct BookingDetailDataModel {
     let location: String
     
     let bookingDateText: String
-    let status: String
+    let status: StatusLabel
     let paxNumber: Int
     
     let price: Double
     
     let address: String
+    
+    struct StatusLabel {
+        let text: String
+        let style: CocoStatusLabelStyle
+    }
+    
+    
+    init(bookingDetail: BookingDetails) {
+        var bookingStatus: String = bookingDetail.status
+        var statusStyle: CocoStatusLabelStyle = .pending
+        
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        
+        if let targetDate: Date = formatter.date(from: bookingDetail.activityDate) {
+            let today: Date = Date()
+            
+            if targetDate < today {
+                bookingStatus = "Completed"
+                statusStyle = .success
+            }
+            else if targetDate > today {
+                bookingStatus = "Upcoming"
+                statusStyle = .refund
+            }
+        }
+        
+        status = StatusLabel(text: bookingStatus, style: statusStyle)
+        imageString = bookingDetail.destination.imageUrl ?? ""
+        activityName = bookingDetail.activityTitle
+        packageName = bookingDetail.packageName
+        location = bookingDetail.destination.name
+        paxNumber = bookingDetail.participants
+        price = bookingDetail.totalPrice
+        address = bookingDetail.address
+        bookingDateText = bookingDetail.activityDate
+    }
 }
 
 final class TripDetailView: UIView {
@@ -40,13 +77,22 @@ final class TripDetailView: UIView {
         activityDescription.text = data.packageName
         
         bookingDateLabel.text = data.bookingDateText
-        statusLabel.text = data.status
         paxNumberLabel.text = "\(data.paxNumber)"
         
         priceDetailTitle.text = "Pay During Trip"
         priceDetailPrice.text = "Rp\(data.price)"
         
         addressLabel.text = data.address
+    }
+    
+    func configureStatusLabelView(with view: UIView) {
+        statusLabel.addSubview(view)
+        view.layout {
+            $0.leading(to: statusLabel.leadingAnchor)
+                .top(to: statusLabel.topAnchor)
+                .trailing(to: statusLabel.trailingAnchor, relation: .lessThanOrEqual)
+                .bottom(to: statusLabel.bottomAnchor)
+        }
     }
     
     private lazy var activityDetailView: UIView = createActivityDetailView()
@@ -77,11 +123,7 @@ final class TripDetailView: UIView {
     )
     
     private lazy var statusSection: UIView = createSectionTitle(title: "Status", view: statusLabel)
-    private lazy var statusLabel: UILabel = UILabel(
-        font: .jakartaSans(forTextStyle: .body, weight: .bold),
-        textColor: Token.mainColorPrimary,
-        numberOfLines: 0
-    )
+    private lazy var statusLabel: UIView = UIView()
     
     private lazy var paxNumberSection: UIView = createSectionTitle(title: "Person", view: paxNumberLabel)
     private lazy var paxNumberLabel: UILabel = UILabel(
