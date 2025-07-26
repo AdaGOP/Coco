@@ -65,6 +65,7 @@ struct ActivityPackage: JSONDecodable {
     let minParticipants: Int
     let pricePerPerson: Double
     let host: Host
+    let imageUrl: String
 
     enum CodingKeys: String, CodingKey {
         case id, name, description, host
@@ -74,13 +75,17 @@ struct ActivityPackage: JSONDecodable {
         case maxParticipants = "max_participants"
         case minParticipants = "min_participants"
         case pricePerPerson = "price_per_person"
+        case imageUrl = "image_url"
     }
     
     struct Host: JSONDecodable {
+        let bio: String
+        let name: String
         let profileImageUrl: String
         
         enum CodingKeys: String, CodingKey {
             case profileImageUrl = "profile_image_url"
+            case bio, name
         }
     }
 }

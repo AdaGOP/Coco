@@ -53,6 +53,8 @@ extension SignInViewModel: SignInViewModelProtocol {
             case .success(let success):
                 delegate?.notifySignInDidSuccess()
                 UserDefaults.standard.setValue(success.userId, forKey: "user-id")
+                UserDefaults.standard.setValue(success.name, forKey: "user-name")
+                UserDefaults.standard.setValue(success.email, forKey: "user-email")
             case .failure(let failure):
                 break
             }
