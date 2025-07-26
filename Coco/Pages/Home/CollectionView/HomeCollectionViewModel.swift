@@ -16,7 +16,7 @@ final class HomeCollectionViewModel {
         reloadCollection()
     }
     
-    private var activityData: HomeActivityCellSectionDataModel = (nil, [])
+    private(set) var activityData: HomeActivityCellSectionDataModel = (nil, [])
 }
 
 extension HomeCollectionViewModel: HomeCollectionViewModelProtocol {

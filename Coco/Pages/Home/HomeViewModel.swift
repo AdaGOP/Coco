@@ -21,13 +21,13 @@ final class HomeViewModel {
     }
     
     private let activityFetcher: ActivityFetcherProtocol
-    private lazy var collectionViewModel: HomeCollectionViewModelProtocol = {
+    private(set) lazy var collectionViewModel: HomeCollectionViewModelProtocol = {
         let viewModel: HomeCollectionViewModel = HomeCollectionViewModel()
         viewModel.delegate = self
         return viewModel
     }()
-    private lazy var loadingState: HomeLoadingState = HomeLoadingState()
-    private lazy var searchBarViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
+    private(set) lazy var loadingState: HomeLoadingState = HomeLoadingState()
+    private(set) lazy var searchBarViewModel: HomeSearchBarViewModel = HomeSearchBarViewModel(
         leadingIcon: CocoIcon.icSearchLoop.image,
         placeholderText: "Search...",
         currentTypedText: "",
@@ -43,7 +43,7 @@ final class HomeViewModel {
     private var responseData: [Activity] = []
     private var cancellables: Set<AnyCancellable> = Set()
     
-    private var filterDataModel: HomeSearchFilterTrayDataModel?
+    private(set) var filterDataModel: HomeSearchFilterTrayDataModel?
 }
 
 extension HomeViewModel: HomeViewModelProtocol {

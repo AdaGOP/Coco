@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ActivityDetailDataModel {
+struct ActivityDetailDataModel: Equatable {
     let title: String
     let location: String
     let imageUrlsString: [String]
@@ -20,13 +20,13 @@ struct ActivityDetailDataModel {
     let availablePackages: ActivitySectionLayout<[Package]>
     let hiddenPackages: [Package]
     
-    struct ProviderDetail {
+    struct ProviderDetail: Equatable {
         let name: String
         let description: String
         let imageUrlString: String
     }
     
-    struct Package {
+    struct Package: Equatable {
         let imageUrlString: String
         let name: String
         let description: String
@@ -77,7 +77,7 @@ struct ActivityDetailDataModel {
     }
 }
 
-struct ActivitySectionLayout<T> {
+struct ActivitySectionLayout<T: Equatable>: Equatable {
     let title: String
     let content: T
 }

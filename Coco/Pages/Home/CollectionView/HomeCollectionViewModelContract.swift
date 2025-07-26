@@ -20,6 +20,8 @@ protocol HomeCollectionViewModelProtocol: AnyObject {
     var actionDelegate: HomeCollectionViewModelAction? { get set }
     var delegate: HomeCollectionViewModelDelegate? { get set }
     
+    var activityData: HomeActivityCellSectionDataModel { get }
+    
     func onViewDidLoad()
     func updateActivity(activity: HomeActivityCellSectionDataModel)
     func onActivityDidTap(_ dataModel: HomeActivityCellDataModel)
