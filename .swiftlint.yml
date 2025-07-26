@@ -15,8 +15,12 @@ excluded:
   - Pods                      # Ignore files in CocoaPods directory (3rd party dependencies)
   - Vendor                    # Ignore files in Vendor directory (3rd party dependencies)
   - Generated                 # Ignore auto-generated code files
-  - CocoTests
-  - */CocoTests/*
+  - "**/*Tests"
+  - "**/*Tests.swift"
+  - "**/Test/**"
+  - CocoTests/**/*
+  - "**/*Test.swift"
+  - .build
 
 identifier_name:
   min_length: 3               # Enforce minimum length of 3 characters for variable/constant names
