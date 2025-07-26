@@ -10,7 +10,7 @@ on:
 jobs:
   lint:
     name: Run SwiftLint
-    runs-on: macos-14 # Updated to macOS 14 to support Xcode 16
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       - name: Install SwiftLint
@@ -21,11 +21,10 @@ jobs:
   test:
     name: Run Tests
     needs: lint
-    runs-on: macos-14 # Updated to macOS 14 to support Xcode 16
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v3
       
-      # Updated Xcode version to match your local version
       - uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.1'
@@ -42,7 +41,7 @@ jobs:
           xcodebuild test \
             -project Coco.xcodeproj \
             -scheme Coco \
-            -destination 'platform=iOS Simulator,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=17.4' \
             -derivedDataPath Build/DerivedData \
             ONLY_ACTIVE_ARCH=YES \
             CODE_SIGN_IDENTITY="" \
