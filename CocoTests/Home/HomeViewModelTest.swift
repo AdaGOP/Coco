@@ -146,7 +146,7 @@ struct HomeViewModelTest {
         #expect(context.actionDelegate.invokedActivityDidSelectCount == 1)
         
         let selectedData = context.actionDelegate.invokedActivityDidSelectParameters?.data
-        #expect(selectedData?.title == "Snorkeling Adventure in Nusass Penida")
+        #expect(selectedData?.title == "Snorkeling Adventure in Nusa Penida")
         #expect(selectedData?.location == "Nusa Penida")
         #expect(selectedData?.imageUrlsString == [
             "https://example.com/images/nusa-penida-thumb.jpg",
