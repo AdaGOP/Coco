@@ -20,6 +20,9 @@ final class MyTripViewModel {
 
 extension MyTripViewModel: MyTripViewModelProtocol {
     func onViewWillAppear() {
+        actionDelegate?.configureView(datas: [])
+        responses = []
+        
         Task { @MainActor in
             let response: [BookingDetails] = try await fetcher.fetchTripBookingList(
                 request: TripBookingListSpec(userId: UserDefaults.standard.value(forKey: "user-id") as? String ?? "")

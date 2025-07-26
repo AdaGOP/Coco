@@ -49,9 +49,9 @@ struct ActivityDetailDataModel {
         providerDetail = ActivitySectionLayout(
             title: "Trip Provider",
             content: ProviderDetail(
-                name: response.destination.name,
-                description: response.destination.description,
-                imageUrlString: response.destination.imageUrl ?? ""
+                name: response.packages[0].host.name,
+                description: response.packages[0].host.bio,
+                imageUrlString: response.packages[0].host.profileImageUrl
             )
         )
         tripFacilities = ActivitySectionLayout(
@@ -64,7 +64,7 @@ struct ActivityDetailDataModel {
             title: "Available Packages",
             content: response.packages.map {
                 Package(
-                    imageUrlString: $0.host.profileImageUrl,
+                    imageUrlString: $0.imageUrl,
                     name: $0.name,
                     description: "Min.\($0.minParticipants) - Max.\($0.maxParticipants)",
                     price: "Rp\($0.pricePerPerson)",
