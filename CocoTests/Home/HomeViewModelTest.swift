@@ -261,7 +261,6 @@ private extension HomeViewModelTest {
     }
 }
 
-
 private final class MockHomeViewModelAction: HomeViewModelAction {
 
     var invokedConstructCollectionView = false

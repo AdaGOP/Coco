@@ -15,6 +15,8 @@ excluded:
   - Pods                      # Ignore files in CocoaPods directory (3rd party dependencies)
   - Vendor                    # Ignore files in Vendor directory (3rd party dependencies)
   - Generated                 # Ignore auto-generated code files
+  - CocoTests
+  - */CocoTests/*
 
 identifier_name:
   min_length: 3               # Enforce minimum length of 3 characters for variable/constant names
@@ -78,9 +80,3 @@ custom_rules:
     message: "Class is complex, better explicitly declare access control (e.g., public, private, internal)."
     severity: warning
     # Warns if a class declaration is missing explicit access control modifier
-
-excluded:
-  - CocoTests
-  - */CocoTests/*
-  - fastlane
-  - Pods
