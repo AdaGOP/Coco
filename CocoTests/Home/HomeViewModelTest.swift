@@ -10,262 +10,257 @@ import Testing
 @testable import Coco
 
 struct HomeViewModelTest {
-
-    @Test("open the filter tray")
-    func tapping_search_bar_trailing_icon() async throws {
-        // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
+    private struct TestContext {
+        let fetcher: MockActivityFetcher
+        let actionDelegate: MockHomeViewModelAction
+        let navigationDelegate: MockHomeViewModelNavigationDelegate
+        let viewModel: HomeViewModel
+        let activities: ActivityModelArray
         
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
-        
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
-        
-        // --- WHEN ---
-        viewModel.onViewDidLoad()
-        viewModel.searchBarViewModel.trailingIcon?.didTap?()
-        
-        // --- THEN ---
-        #expect(actionDelegateMock.invokedOpenFilterTrayCount == 1)
+        static func setup() throws -> TestContext {
+            let fetcher = MockActivityFetcher()
+            let actionDelegate = MockHomeViewModelAction()
+            let navigationDelegate = MockHomeViewModelNavigationDelegate()
+            
+            let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
+            fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
+            
+            let viewModel = HomeViewModel(activityFetcher: fetcher)
+            viewModel.actionDelegate = actionDelegate
+            viewModel.navigationDelegate = navigationDelegate
+            
+            return TestContext(
+                fetcher: fetcher,
+                actionDelegate: actionDelegate,
+                navigationDelegate: navigationDelegate,
+                viewModel: viewModel,
+                activities: activities
+            )
+        }
     }
     
-    @Test("filtering from the filter tray")
-    func filter_tray_did_apply() async throws {
+    // MARK: - Filter Tests
+    
+    @Test("filter tray - should open on icon tap")
+    func filterTray_whenIconTapped_shouldOpen() async throws {
         // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
-        
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
-        
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
+        let context = try TestContext.setup()
         
         // --- WHEN ---
-        viewModel.onViewDidLoad()
-        viewModel.searchBarViewModel.trailingIcon?.didTap?()
-        actionDelegateMock.invokedOpenFilterTrayParameters?.viewModel.filterDidApplyPublisher.send(
-            HomeSearchFilterTrayDataModel(
-                filterPillDataState: [],
-                priceRangeModel: HomeSearchFilterPriceRangeModel(minPrice: 499000.0, maxPrice: 200000, range: 0...0)
+        context.viewModel.onViewDidLoad()
+        context.viewModel.searchBarViewModel.trailingIcon?.didTap?()
+        
+        // --- THEN ---
+        #expect(context.actionDelegate.invokedOpenFilterTrayCount == 1)
+    }
+    
+    @Test("filter tray - should apply filters")
+    func filterTray_whenFiltersApplied_shouldUpdateCollection() async throws {
+        // --- GIVEN ---
+        let context = try TestContext.setup()
+        
+        // --- WHEN ---
+        context.viewModel.onViewDidLoad()
+        context.viewModel.searchBarViewModel.trailingIcon?.didTap?()
+        
+        let filterModel = HomeSearchFilterTrayDataModel(
+            filterPillDataState: [],
+            priceRangeModel: HomeSearchFilterPriceRangeModel(
+                minPrice: 499000.0,
+                maxPrice: 200000,
+                range: 0...0
             )
         )
         
         // --- THEN ---
-        #expect(actionDelegateMock.invokedOpenFilterTrayCount == 1)
-        #expect(viewModel.collectionViewModel.activityData.dataModel.count == 1)
+        context.actionDelegate.invokedOpenFilterTrayParameters?.viewModel
+            .filterDidApplyPublisher.send(filterModel)
         
+        #expect(context.actionDelegate.invokedOpenFilterTrayCount == 1)
+        #expect(context.viewModel.collectionViewModel.activityData.dataModel.count == 1)
     }
     
-    @Test("success when view did load")
-    func success_on_view_first_load() async throws {
+    // MARK: - Initial Load Tests
+    
+    @Test("view did load - should setup initial state")
+    func viewDidLoad_whenSuccessful_shouldSetupInitialState() async throws {
         // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
-        
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
-        
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
-        
+        let context = try TestContext.setup()
         
         // --- WHEN ---
-        #expect(viewModel.loadingState.percentage == 0)
-        viewModel.onViewDidLoad()
+        #expect(context.viewModel.loadingState.percentage == 0)
+        context.viewModel.onViewDidLoad()
         
         // --- THEN ---
-        #expect(actionDelegateMock.invokedConstructCollectionViewCount == 1)
-        #expect(actionDelegateMock.invokedConstructLoadingStateCount == 1)
-        #expect(actionDelegateMock.invokedConstructNavBarCount == 1)
+        assertViewDidLoadSetup(context)
+        #expect(context.actionDelegate.invokedToggleLoadingViewParameters?.isShown == false)
+        #expect(context.actionDelegate.invokedToggleLoadingViewParameters?.after == 1.0)
         
-        #expect(viewModel.loadingState.percentage == 100)
-        #expect(actionDelegateMock.invokedToggleLoadingViewCount == 1)
-        #expect(actionDelegateMock.invokedToggleLoadingViewParameters?.isShown == false)
-        #expect(actionDelegateMock.invokedToggleLoadingViewParameters?.after == 1.0)
-        
-        #expect(viewModel.collectionViewModel.activityData == ("", [
-            HomeActivityCellDataModel(activity: activities.values[0])
-        ]))
+        let expectedActivity = HomeActivityCellDataModel(activity: context.activities.values[0])
+        #expect(context.viewModel.collectionViewModel.activityData == ("", [expectedActivity]))
     }
     
-    @Test("applying search query")
-    func query_search_applied() async throws {
+    // MARK: - Search Tests
+    
+    @Test("search - should handle empty query")
+    func search_whenEmptyQuery_shouldUpdateState() async throws {
         // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
+        let context = try TestContext.setup()
         
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
+        context.viewModel.onViewDidLoad()
         
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
+        let emptyActivities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities-empty")
+        context.fetcher.stubbedFetchActivityCompletionResult = (.success(emptyActivities), ())
         
         // --- WHEN ---
-        #expect(viewModel.loadingState.percentage == 0)
-        viewModel.onViewDidLoad()
-        
-        let activitiesEmpty: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities-empty")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activitiesEmpty), ())
-        
-        viewModel.onSearchDidApply("")
+        context.viewModel.onSearchDidApply("")
         
         // --- THEN ---
-        #expect(viewModel.searchBarViewModel.currentTypedText == "")
-        #expect(viewModel.loadingState.percentage == 100)
-        #expect(actionDelegateMock.invokedToggleLoadingViewParametersList.map { $0.isShown } == [false, true, false] )
-        
-        #expect(viewModel.collectionViewModel.activityData == ("", []))
+        #expect(context.viewModel.searchBarViewModel.currentTypedText == "")
+        #expect(context.viewModel.loadingState.percentage == 100)
+        assertLoadingStates(context, states: [false, true, false])
+        #expect(context.viewModel.collectionViewModel.activityData == ("", []))
     }
     
-    @Test("success with known data id activity from collection view did tap")
-    func success_tap_activity_collection_view_data() async throws {
+    // MARK: - Activity Selection Tests
+    
+    @Test("activity selection - should handle valid selection")
+    func activitySelection_whenValidId_shouldNotifyDelegate() async throws {
         // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
+        let context = try TestContext.setup()
         
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
+        context.viewModel.onViewDidLoad()
         
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
-        
-        
-        // --- WHEN ---
-        viewModel.onViewDidLoad()
-        viewModel.notifyCollectionViewActivityDidTap(
-            HomeActivityCellDataModel(
-                id: 1,
-                area: "area",
-                name: "name",
-                priceText: "priceText",
-                imageUrl: nil
-            )
+        let activityData = HomeActivityCellDataModel(
+            id: 1,
+            area: "area",
+            name: "name",
+            priceText: "priceText",
+            imageUrl: nil
         )
         
+        // --- WHEN ---
+        context.viewModel.notifyCollectionViewActivityDidTap(activityData)
+        
         // --- THEN ---
-        #expect(actionDelegateMock.invokedActivityDidSelectCount == 1)
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data == ActivityDetailDataModel(activities.values[0]))
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.title == "Snorkeling Adventure in Nusa Penida")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.location == "Nusa Penida")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.imageUrlsString == ["https://example.com/images/nusa-penida-thumb.jpg", "https://example.com/images/nusa-penida-gallery1.jpg"])
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.detailInfomation.title == "Details")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.detailInfomation.content == "Explore the stunning underwater world of Nusa Penida with our professional guides. Perfect for beginners and experienced snorkelers alike.")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.providerDetail.title == "Trip Provider")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.providerDetail.content.name == "Made Wirawan")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.providerDetail.content.imageUrlString == "https://example.com/hosts/made-wirawan.jpg")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.providerDetail.content.description == "Professional diving instructor with 5 years of experience")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.tripFacilities.title == "This Trip Includes")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.tripFacilities.content == ["Snorkeling Equipment", "Life Jacket", "Waterproof Camera"])
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.availablePackages.title == "Available Packages")
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.availablePackages.content.count == 2)
-        #expect(actionDelegateMock.invokedActivityDidSelectParameters?.data.hiddenPackages.count == actionDelegateMock.invokedActivityDidSelectParameters?.data.availablePackages.content.count)
+        #expect(context.actionDelegate.invokedActivityDidSelectCount == 1)
+        
+        let selectedData = context.actionDelegate.invokedActivityDidSelectParameters?.data
+        #expect(selectedData?.title == "Snorkeling Adventure in Nusa Penida")
+        #expect(selectedData?.location == "Nusa Penida")
+        #expect(selectedData?.imageUrlsString == [
+            "https://example.com/images/nusa-penida-thumb.jpg",
+            "https://example.com/images/nusa-penida-gallery1.jpg"
+        ])
+        
+        // Details
+        #expect(selectedData?.detailInfomation.title == "Details")
+        #expect(selectedData?.detailInfomation.content == "Explore the stunning underwater world of Nusa Penida with our professional guides. Perfect for beginners and experienced snorkelers alike.")
+        
+        // Provider
+        #expect(selectedData?.providerDetail.title == "Trip Provider")
+        #expect(selectedData?.providerDetail.content.name == "Made Wirawan")
+        #expect(selectedData?.providerDetail.content.imageUrlString == "https://example.com/hosts/made-wirawan.jpg")
+        #expect(selectedData?.providerDetail.content.description == "Professional diving instructor with 5 years of experience")
+        
+        // Facilities
+        #expect(selectedData?.tripFacilities.title == "This Trip Includes")
+        #expect(selectedData?.tripFacilities.content == ["Snorkeling Equipment", "Life Jacket", "Waterproof Camera"])
+        
+        // Packages
+        #expect(selectedData?.availablePackages.title == "Available Packages")
+        #expect(selectedData?.availablePackages.content.count == 2)
+        #expect(selectedData?.hiddenPackages.count == selectedData?.availablePackages.content.count)
     }
     
-    @Test("failed with unknown data id activity from collection view did tap")
-    func failed_tap_activity_collection_view_data() async throws {
+    @Test("activity selection - should handle invalid selection")
+    func activitySelection_whenInvalidId_shouldNotNotifyDelegate() async throws {
         // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
+        let context = try TestContext.setup()
         
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
+        context.viewModel.onViewDidLoad()
         
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
-        
-        // --- WHEN ---
-        viewModel.onViewDidLoad()
-        viewModel.notifyCollectionViewActivityDidTap(
-            HomeActivityCellDataModel(
-                id: 999,
-                area: "area",
-                name: "name",
-                priceText: "priceText",
-                imageUrl: nil
-            )
+        let invalidActivityData = HomeActivityCellDataModel(
+            id: 999,
+            area: "area",
+            name: "name",
+            priceText: "priceText",
+            imageUrl: nil
         )
         
+        // --- WHEN ---
+        context.viewModel.notifyCollectionViewActivityDidTap(invalidActivityData)
+        
         // --- THEN ---
-        #expect(actionDelegateMock.invokedActivityDidSelectCount == 0)
+        #expect(context.actionDelegate.invokedActivityDidSelectCount == 0)
     }
     
-    @Test("search bar being tapped from a typeable param")
-    func search_bar_tapped_with_typeable() async throws {
+    // MARK: - Search Bar Interaction Tests
+    
+    @Test("search bar - typeable interaction")
+    func searchBar_whenTypeable_shouldNotOpenTray() async throws {
         // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
+        let context = try TestContext.setup()
         
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
-        
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
-        
-        // --- WHEN ---
-        viewModel.notifyHomeSearchBarDidTap(
+        let searchBarViewModel = HomeSearchBarViewModel(
+            leadingIcon: nil,
+            placeholderText: "",
+            currentTypedText: "",
+            trailingIcon: nil,
             isTypeAble: true,
-            viewModel: HomeSearchBarViewModel(
-                leadingIcon: nil,
-                placeholderText: "",
-                currentTypedText: "",
-                trailingIcon: nil,
-                isTypeAble: true,
-                delegate: nil
-            )
+            delegate: nil
         )
-        
-        // --- THEN ---
-        #expect(actionDelegateMock.invokedOpenSearchTrayCount == 0)
-    }
-    
-    @Test("search bar being tapped from a non typeable param")
-    func search_bar_tapped_with_non_typeable() async throws {
-        // --- GIVEN ---
-        let fetcher: MockActivityFetcher = MockActivityFetcher()
-        let actionDelegateMock: MockHomeViewModelAction = MockHomeViewModelAction()
-        let navigationDelegateMock: MockHomeViewModelNavigationDelegate = MockHomeViewModelNavigationDelegate()
-        
-        let activities: ActivityModelArray = try JSONReader.getObjectFromJSON(with: "activities")
-        fetcher.stubbedFetchActivityCompletionResult = (.success(activities), ())
-        
-        let viewModel: HomeViewModel = HomeViewModel(activityFetcher: fetcher)
-        viewModel.actionDelegate = actionDelegateMock
-        viewModel.navigationDelegate = navigationDelegateMock
         
         // --- WHEN ---
-        viewModel.notifyHomeSearchBarDidTap(
-            isTypeAble: false,
-            viewModel: HomeSearchBarViewModel(
-                leadingIcon: nil,
-                placeholderText: "",
-                currentTypedText: "",
-                trailingIcon: nil,
-                isTypeAble: false,
-                delegate: nil
-            )
+        context.viewModel.notifyHomeSearchBarDidTap(
+            isTypeAble: true,
+            viewModel: searchBarViewModel
         )
         
         // --- THEN ---
-        #expect(actionDelegateMock.invokedOpenSearchTrayCount == 1)
+        #expect(context.actionDelegate.invokedOpenSearchTrayCount == 0)
+    }
+    
+    @Test("search bar - non-typeable interaction")
+    func searchBar_whenNonTypeable_shouldOpenTray() async throws {
+        // --- GIVEN ---
+        let context = try TestContext.setup()
+        
+        let searchBarViewModel = HomeSearchBarViewModel(
+            leadingIcon: nil,
+            placeholderText: "",
+            currentTypedText: "",
+            trailingIcon: nil,
+            isTypeAble: false,
+            delegate: nil
+        )
+        
+        // --- WHEN ---
+        context.viewModel.notifyHomeSearchBarDidTap(
+            isTypeAble: false,
+            viewModel: searchBarViewModel
+        )
+        
+        // --- THEN ---
+        #expect(context.actionDelegate.invokedOpenSearchTrayCount == 1)
     }
 }
+
+// MARK: - Test Helpers
+
+private extension HomeViewModelTest {
+    private func assertViewDidLoadSetup(_ context: TestContext) {
+        #expect(context.actionDelegate.invokedConstructCollectionViewCount == 1)
+        #expect(context.actionDelegate.invokedConstructLoadingStateCount == 1)
+        #expect(context.actionDelegate.invokedConstructNavBarCount == 1)
+        #expect(context.viewModel.loadingState.percentage == 100)
+    }
+    
+    private func assertLoadingStates(_ context: TestContext, states: [Bool]) {
+        #expect(context.actionDelegate.invokedToggleLoadingViewParametersList.map { $0.isShown } == states)
+    }
+}
+
 
 private final class MockHomeViewModelAction: HomeViewModelAction {
 
