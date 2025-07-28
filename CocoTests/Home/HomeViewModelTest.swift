@@ -51,7 +51,7 @@ struct HomeViewModelTest {
         context.viewModel.searchBarViewModel.trailingIcon?.didTap?()
         
         // --- THEN ---
-        #expect(context.actionDelegate.invokedOpenFilterTrayCount == 2)
+        #expect(context.actionDelegate.invokedOpenFilterTrayCount == 1)
     }
     
     @Test("filter tray - should apply filters")
