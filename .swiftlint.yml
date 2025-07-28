@@ -58,7 +58,7 @@ type_body_length:
   error: 500                  # Error if type body exceeds 500 lines
 
 function_body_length:
-  warning: 100                 # Warn if function body is longer than 50 lines
+  warning: 100                 # Warn if function body is longer than 100 lines
   error: 150                  # Error if function body exceeds 150 lines (split function)
 
 force_unwrapping:
